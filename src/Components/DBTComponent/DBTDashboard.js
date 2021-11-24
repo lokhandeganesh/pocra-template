@@ -487,7 +487,7 @@ export default class DBTDashboard extends Component {
 							text: new Text({
 
 								text: '' + feature.get('no_of_application') + '',
-								font: 'bold 12px sans-serif',
+								font: 'bold 14px sans-serif',
 
 								offsetY: 15,
 								offsetX: 25,
@@ -495,10 +495,10 @@ export default class DBTDashboard extends Component {
 								scale: 1,
 								// textBaseline: 'bottom',
 								fill: new Fill({
-									color: '#1F51FF'
+									color: '#000000'
 								}),
 								stroke: new Stroke({
-									color: '#565287',
+									color: '#ffffff',
 									width: 0.5
 								})
 							}),

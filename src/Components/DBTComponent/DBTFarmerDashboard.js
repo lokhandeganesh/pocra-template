@@ -531,7 +531,7 @@ export default class DBTFarmerDashboard extends Component {
 							text: new Text({
 
 								text: '' + feature.get('no_of_application') + '',
-								font: 'bold 12px sans-serif',
+								font: 'bold 14px sans-serif',
 
 								offsetY: 15,
 								offsetX: 25,
@@ -539,10 +539,10 @@ export default class DBTFarmerDashboard extends Component {
 								scale: 1,
 								// textBaseline: 'bottom',
 								fill: new Fill({
-									color: '#1F51FF'
+									color: '#000000'
 								}),
 								stroke: new Stroke({
-									color: '#565287',
+									color: '#ffffff',
 									width: 0.5
 								})
 							}),
@@ -632,7 +632,7 @@ export default class DBTFarmerDashboard extends Component {
 							text: new Text({
 
 								text: '' + feature.get('no_of_application') + '',
-								font: 'bold 12px sans-serif',
+								font: 'bold 14px sans-serif',
 
 								offsetY: 15,
 								offsetX: 25,
@@ -640,10 +640,10 @@ export default class DBTFarmerDashboard extends Component {
 								scale: 1,
 								// textBaseline: 'bottom',
 								fill: new Fill({
-									color: '#1F51FF'
+									color: '#000000'
 								}),
 								stroke: new Stroke({
-									color: '#565287',
+									color: '#FFFFFF',
 									width: 0.5
 								})
 							}),
@@ -735,7 +735,7 @@ export default class DBTFarmerDashboard extends Component {
 							text: new Text({
 
 								text: '' + feature.get('no_of_application') + '',
-								font: 'bold 12px sans-serif',
+								font: 'bold 14px sans-serif',
 
 								offsetY: 15,
 								offsetX: 25,
@@ -743,10 +743,10 @@ export default class DBTFarmerDashboard extends Component {
 								scale: 1,
 								// textBaseline: 'bottom',
 								fill: new Fill({
-									color: '#1F51FF'
+									color: '#000000'
 								}),
 								stroke: new Stroke({
-									color: '#565287',
+									color: '#FFFFFF',
 									width: 0.5
 								})
 							}),
@@ -843,17 +843,17 @@ export default class DBTFarmerDashboard extends Component {
 						return new Style({
 							text: new Text({
 								text: '' + feature.get('no_of_application') + '',
-								font: 'bold 12px sans-serif',
+								font: 'bold 14px sans-serif',
 								offsetY: 15,
 								offsetX: 25,
 								align: 'bottom',
 								scale: 1,
 								// textBaseline: 'bottom',
 								fill: new Fill({
-									color: '#1F51FF'
+									color: '#000000'
 								}),
 								stroke: new Stroke({
-									color: '#565287',
+									color: '#FFFFFF',
 									width: 0.5
 								})
 							}),
