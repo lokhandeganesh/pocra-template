@@ -869,9 +869,9 @@ export default class DBTFarmerDashboard extends Component {
 	getDBTLayerClassValues(activityId, applicationFor) {
 		var url = "", layerName = "";
 		if (activityId === "All") {
-			layerName = "dbtDistrict";
+			layerName = "dbtDistrict_attribute";
 		} else {
-			layerName = "dbtAcivityGroup";
+			layerName = "dbtAcivityGroup_attribute";
 		}
 
 		let initialActivity = [];
@@ -925,9 +925,9 @@ export default class DBTFarmerDashboard extends Component {
 
 		var url = "", layerName = "";
 		if (activityId === "All") {
-			layerName = "dbtTaluka";
+			layerName = "dbtTaluka_attribute";
 		} else {
-			layerName = "dbtAcivityGroupTaluka";
+			layerName = "dbtAcivityGroupTaluka_attribute";
 		}
 
 		let initialActivity = [];
@@ -977,9 +977,9 @@ export default class DBTFarmerDashboard extends Component {
 
 		var url = "", layerName = "";
 		if (activityId === "All") {
-			layerName = "dbtVillage";
+			layerName = "dbtVillage_attribute";
 		} else {
-			layerName = "dbtAcivityGroupVillage";
+			layerName = "dbtAcivityGroupVillage_attribute";
 		}
 
 		let initialActivity = [];
@@ -1030,9 +1030,9 @@ export default class DBTFarmerDashboard extends Component {
 
 		var url = "", layerName = "";
 		if (activityId === "All") {
-			layerName = "dbtVillage";
+			layerName = "dbtVillage_attribute";
 		} else {
-			layerName = "dbtAcivityGroupVillage";
+			layerName = "dbtAcivityGroupVillage_attribute";
 		}
 
 		let initialActivity = [];
