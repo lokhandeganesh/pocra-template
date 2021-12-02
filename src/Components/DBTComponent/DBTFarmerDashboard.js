@@ -25,15 +25,16 @@ import 'jquery/dist/jquery.min.js';
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
-import $ from 'jquery';	
+import $ from 'jquery';
 
 
 
 var view = "", map;
 let pocraDBTLayer;
+let pocraDBTLayer_point;
 var featurelayer; var a = new Array();
 var thing;
-var geojson, talukaLayer,villageLayer;
+var geojson, talukaLayer, villageLayer;
 var vectorSource = new VectorSource({});
 var imgSource = new ImageWMS({});
 let infoTable;
@@ -62,7 +63,7 @@ export default class DBTFarmerDashboard extends Component {
 				legendLabel: "No of Applications",
 				legendLabelPoint: false,
 			},
-			
+
 
 			activity: [
 				[]
@@ -232,16 +233,16 @@ export default class DBTFarmerDashboard extends Component {
 								var thnname = jsondata.features[0].properties.thnname;
 								// console.log(jsondata.features[0].properties)
 
-								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All'+'&attribute=Farmer')
+								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All' + '&attribute=Farmer')
 									.then(response => {
 										return response.json();
 									}).then(data => {
 										var tableData = "";
 										data.tableInfo.map((activities) => {
-											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application+ "</td><td>" +activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
 
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: '+dtnname+'|Taluka: '+thnname+'</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 
 									});
 							}
@@ -270,15 +271,15 @@ export default class DBTFarmerDashboard extends Component {
 								var jsondata = JSON.parse(html);
 								var dtnname = jsondata.features[0].properties.dtnname;
 								var thnname = jsondata.features[0].properties.thnname;
-								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All'+'&attribute=Farmer')
+								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All' + '&attribute=Farmer')
 									.then(response => {
 										return response.json();
 									}).then(data => {
 										var tableData = "";
 										data.tableInfo.map((activities) => {
-											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application+ "</td><td>" +activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: '+dtnname+'|Taluka: '+thnname+'</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -307,15 +308,15 @@ export default class DBTFarmerDashboard extends Component {
 								var thnname = jsondata.features[0].properties.thnname;
 								var vilname = jsondata.features[0].properties.vilname;
 								// console.log(jsondata.features[0].properties)
-								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode+'&attribute=Farmer')
+								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
 									.then(response => {
 										return response.json();
 									}).then(data => {
 										var tableData = "";
 										data.tableInfo.map((activities) => {
-											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application+ "</td><td>" +activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: '+dtnname+'|Taluka: '+thnname+'|Village: '+vilname+'</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -345,15 +346,15 @@ export default class DBTFarmerDashboard extends Component {
 								var thnname = jsondata.features[0].properties.thnname;
 								var vilname = jsondata.features[0].properties.vilname;
 								// console.log(jsondata.features[0].properties.dtncode)
-								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode+'&attribute=Farmer')
+								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
 									.then(response => {
 										return response.json();
 									}).then(data => {
 										var tableData = "";
 										data.tableInfo.map((activities) => {
-											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application+ "</td><td>" +activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: '+dtnname+'|Taluka: '+thnname+'|Village: '+vilname+'</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -365,20 +366,55 @@ export default class DBTFarmerDashboard extends Component {
 			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && document.getElementById("locationRadio").checked === true) {
 				// imgSource
 				// document.getElementById("tableSection").style.display = "block";
-
-				map.addOverlay(overlay);
-				overlay.setPosition(undefined)
-				const coordinate = evt.coordinate;
-
-				var viewResolution = (view.getResolution());
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
 					viewResolution,
 					'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
 				);
-				
 				if (url) {
 					fetch(url)
+						.then((response) => {
+							// console.log(response.text());
+							return response.text();
+						})
+						.then((html) => {
+							try {
+								var jsondata = JSON.parse(html);
+								var dtnname = jsondata.features[0].properties.dtnname;
+								var thnname = jsondata.features[0].properties.thnname;
+								var vilname = jsondata.features[0].properties.vilname;
+								// console.log(jsondata.features[0].properties.dtncode)
+								fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
+									.then(response => {
+										return response.json();
+									}).then(data => {
+										var tableData = "";
+										// console.log(data);
+										data.tableInfo.map((activities) => {
+											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+										})
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+									});
+							}
+							catch (err) {
+								infoTabled.innerHTML = '';
+
+							}
+						});
+				}
+				map.addOverlay(overlay);
+				overlay.setPosition(undefined)
+				const coordinate = evt.coordinate;
+
+				var viewResolution = (view.getResolution());
+				var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
+					evt.coordinate,
+					viewResolution,
+					'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+				);
+
+				if (url_point) {
+					fetch(url_point)
 						.then((response) => {
 							// console.log(response.text());
 							return response.text();
@@ -390,7 +426,7 @@ export default class DBTFarmerDashboard extends Component {
 								if (jsondata.features[0].properties) {
 									var popupContent = overlay.element.querySelector('#popup-content');
 									popupContent.innerHTML = '';
-									popupContent.innerHTML = '<table id="customers" className="table table-bordered" style="border:1px solid black;width: 100%;color:black"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2 >DBT Attribute Information</td></tr><tr><td style="text-align: left">Village </td><td style="text-align: left">' + jsondata.features[0].properties.village_name + '</td></tr><tr><td style="text-align: left">Activity Name  </td><td style="text-align: left">' + jsondata.features[0].properties.activity_name  + '</td></tr><tr><td style="text-align: left">Farmer Name </td><td style="text-align: left ">' + (jsondata.features[0].properties.full_name) +'</td></tr><tr><td style="text-align: left">7/12 No. </td><td style="text-align: left ">' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
+									popupContent.innerHTML = '<table id="pointTable" className="table table-bordered" style="border:1px solid black;width: 100%;color:black"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2 >DBT Attribute Information</td></tr><tr><td style="text-align: left">Village </td><td style="text-align: left">' + jsondata.features[0].properties.village_name + '</td></tr><tr><td style="text-align: left">Activity Name  </td><td style="text-align: left">' + jsondata.features[0].properties.activity_name + '</td></tr><tr><td style="text-align: left">Farmer Name </td><td style="text-align: left ">' + (jsondata.features[0].properties.full_name) + '</td></tr><tr><td style="text-align: left">7/12 No. </td><td style="text-align: left ">' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
 									overlay.setPosition(coordinate);
 								}
 							} else {
@@ -399,34 +435,6 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-				// var url_villInfo = geojson.getSource().getFeatureInfoUrl(
-				// 	evt.coordinate,
-				// 	viewResolution,
-				// 	'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
-				// );
-
-				// if (url_villInfo) {
-				// 	fetch(url_villInfo)
-				// 		.then((response) => {
-				// 			// console.log(response.text());
-				// 			return response.text();
-				// 		})
-				// 		.then((html) => {
-				// 			var jsondata = JSON.parse(html);
-				// 			console.log(jsondata)
-				// 			// if (jsondata.features[0]) {
-				// 			// 	if (jsondata.features[0].properties) {
-				// 			// 		var popupContent = overlay.element.querySelector('#popup-content');
-				// 			// 		popupContent.innerHTML = '';
-				// 			// 		popupContent.innerHTML = '<table id="customers" className="table table-bordered" style="border:1px solid black;width: 100%;color:black"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2 >DBT Attribute Information</td></tr><tr><td style="text-align: left">Village </td><td style="text-align: left">' + jsondata.features[0].properties.village_name + '</td></tr><tr><td style="text-align: left">Activity Name  </td><td style="text-align: left">' + jsondata.features[0].properties.activity_name  + '</td></tr><tr><td style="text-align: left">Farmer Name </td><td style="text-align: left ">' + (jsondata.features[0].properties.full_name) +'</td></tr><tr><td style="text-align: left">7/12 No. </td><td style="text-align: left ">' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
-				// 			// 		overlay.setPosition(coordinate);
-				// 			// 	}
-				// 			// } else {
-				// 			// 	overlay.setPosition(undefined)
-				// 			// 	alert('Hi')
-				// 			// }
-				// 		});
-				// }
 			}
 
 
@@ -442,7 +450,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		}
 		var applications = 0;
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtDistrict_attribute?activityId=' + activityId+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtDistrict_attribute?activityId=' + activityId + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -558,7 +566,7 @@ export default class DBTFarmerDashboard extends Component {
 		if (vectorSource) {
 
 		}
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtTaluka_attribute?activityId=' + activityId + '&districtCode=' + districtCode+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtTaluka_attribute?activityId=' + activityId + '&districtCode=' + districtCode + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -765,7 +773,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		}
 
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtVillageIndividual_attribute?activityId=' + activityId + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode + '&villageCode=' + villageCode+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtVillageIndividual_attribute?activityId=' + activityId + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode + '&villageCode=' + villageCode + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -876,7 +884,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		let initialActivity = [];
 
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplications_attribute?activityId=' + activityId + '&summary_for=' + applicationFor+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplications_attribute?activityId=' + activityId + '&summary_for=' + applicationFor + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -932,7 +940,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		let initialActivity = [];
 		var labelValue = "";
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsTaluka_attribute?activityId=' + activityId + '&districtCode=' + districtCode + '&summary_for=' + applicationFor+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsTaluka_attribute?activityId=' + activityId + '&districtCode=' + districtCode + '&summary_for=' + applicationFor + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -984,7 +992,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		let initialActivity = [];
 		var labelValue = "";
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsVillage_attribute?activityId=' + activityId + '&summary_for=' + applicationFor + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsVillage_attribute?activityId=' + activityId + '&summary_for=' + applicationFor + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -1037,7 +1045,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		let initialActivity = [];
 		var labelValue = "";
-		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsVillage_attribute?activityId=' + activityId + '&summary_for=' + applicationFor + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode+'&attribute=Farmer')
+		fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dbtNumApplicationsVillage_attribute?activityId=' + activityId + '&summary_for=' + applicationFor + '&districtCode=' + districtCode + '&talukaCode=' + talukaCode + '&attribute=Farmer')
 			.then(response => {
 				return response.json();
 			}).then(data => {
@@ -1118,9 +1126,9 @@ export default class DBTFarmerDashboard extends Component {
 			);
 		});
 		map.addLayer(geojson);
-		
+
 		if (activityId === 'All') {
-			
+
 
 			imgSource = new ImageWMS({
 				attributions: ['&copy; DBT PoCRA'],
@@ -1141,7 +1149,7 @@ export default class DBTFarmerDashboard extends Component {
 			map.addLayer(pocraDBTLayer);
 
 		} else {
-			
+
 
 
 			imgSource = new ImageWMS({
@@ -1258,7 +1266,7 @@ export default class DBTFarmerDashboard extends Component {
 	}
 	// function to add map at village level
 	loadMapVillage = (initialActivity, layerName, activityId, paramValue, talukaCode, applicationFor) => {
-	
+
 
 		if (geojson) {
 			map.removeLayer(geojson);
@@ -1300,7 +1308,7 @@ export default class DBTFarmerDashboard extends Component {
 		if (villageLayer) {
 			map.removeLayer(villageLayer);
 		}
-		
+
 
 		if (activityId === 'All') {
 			villageLayer = new ImageLayer({
@@ -1318,7 +1326,7 @@ export default class DBTFarmerDashboard extends Component {
 					},
 				})
 			});
-			
+
 			map.addLayer(villageLayer);
 
 			imgSource = new ImageWMS({
@@ -1341,7 +1349,7 @@ export default class DBTFarmerDashboard extends Component {
 			});
 			map.addLayer(pocraDBTLayer);
 
-			
+
 
 		} else {
 			imgSource = new ImageWMS({
@@ -1362,7 +1370,7 @@ export default class DBTFarmerDashboard extends Component {
 			pocraDBTLayer = new ImageLayer({
 				title: "DBT PoCRA",
 				source: imgSource
-			});				
+			});
 			map.addLayer(pocraDBTLayer);
 
 			villageLayer = new ImageLayer({
@@ -1380,7 +1388,7 @@ export default class DBTFarmerDashboard extends Component {
 					},
 				})
 			});
-			
+
 			map.addLayer(villageLayer);
 
 
@@ -1402,7 +1410,7 @@ export default class DBTFarmerDashboard extends Component {
 		});
 		map.addLayer(talukaLayer);
 
-		
+
 	}
 
 	// function to add map at single village level
@@ -1771,7 +1779,7 @@ export default class DBTFarmerDashboard extends Component {
 
 		}
 
-		else if (villageRadio === false && regestrationRadio === true && applicationRadio == false && presanctionRadio === false && workCompletedRadio === false && paymentDoneRadio === false && locationRadio === false)  {
+		else if (villageRadio === false && regestrationRadio === true && applicationRadio == false && presanctionRadio === false && workCompletedRadio === false && paymentDoneRadio === false && locationRadio === false) {
 			document.getElementById("villageRadio").checked = false;
 			document.getElementById("regestrationRadio").checked = true;
 			document.getElementById("applicationRadio").checked = false;
@@ -1855,7 +1863,7 @@ export default class DBTFarmerDashboard extends Component {
 				map.removeLayer(featurelayer)
 				map.removeLayer(geojson)
 
-			}this.setState(prev => ({
+			} this.setState(prev => ({
 				classValues: {
 					appl_1: 0,
 					appl_2: 0,
@@ -1893,15 +1901,15 @@ export default class DBTFarmerDashboard extends Component {
 				params: {
 					'LAYERS': 'PoCRA_Dashboard:dbt_point_attribute',
 					'TILED': true,
-					'viewparams': "vinCode:" + village.value +";attribute:Farmer"
+					'viewparams': "vinCode:" + village.value + ";attribute:Farmer"
 				},
 			})
 			// console.log('viewparams'+"vinCode:" + village.value);
-			pocraDBTLayer = new ImageLayer({
+			pocraDBTLayer_point = new ImageLayer({
 				title: "DBT PoCRA",
 				source: imgSource
 			});
-			map.addLayer(pocraDBTLayer)
+			map.addLayer(pocraDBTLayer_point)
 		}
 		if (applicationFor === "no_of_village") {
 			labelValue = "PoCRA Villages";
@@ -1933,11 +1941,10 @@ export default class DBTFarmerDashboard extends Component {
 			this.getDBTLayerClassValues(activity.value, applicationFor);
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		} else if (activity.value !== "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
-			document.getElementById("locRadio").style.display = "none";			
+			document.getElementById("locRadio").style.display = "none";						
+			document.getElementById("regestrationDiv").style.display = "none";
+			
 			document.getElementById("villagediv").style.display = "block";
-
-			// document.getElementById("regestrationRadio").style.display = "block";
-			// document.getElementById("regestrationRadio").style.display = "none";
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2109,7 +2116,7 @@ export default class DBTFarmerDashboard extends Component {
 																					<input class="custom-control-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="villageRadio" class="custom-control-label" >PoCRA Villages</label>
 																				</div>
-																				<div class="custom-control custom-radio">
+																				<div class="custom-control custom-radio" id='regestrationDiv'>
 																					<input class="custom-control-input" type="radio" id="regestrationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="regestrationRadio" class="custom-control-label" >Registrations</label>
 																				</div>
