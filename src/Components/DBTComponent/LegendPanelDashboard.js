@@ -47,13 +47,14 @@ export default class LegendPanelDashboard extends Component {
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/FPD.png" height={'20px'} width={'25px'} />  </td>
 	
-							<td>Farm Pond (Individual)</td>
+							{/* <td>Farm Pond (Individual)</td> */}
+							<td>Farm Pond</td>
 						</tr>
-						<tr>
+						{/* <tr>
 							<td><img src="pocra_dashboard/dist/legend/FPL.png" height={'20px'} width={'25px'} />  </td>
 	
 							<td>Farm Pond Lining</td>
-						</tr>
+						</tr> */}
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/OTH.png" height={'20px'} width={'25px'} />  </td>
 	

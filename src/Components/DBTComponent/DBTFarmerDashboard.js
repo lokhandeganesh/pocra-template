@@ -1941,8 +1941,10 @@ export default class DBTFarmerDashboard extends Component {
 			this.getDBTLayerClassValues(activity.value, applicationFor);
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		} else if (activity.value !== "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
+			
+			// disable location and regestation radio button when activity selected and District,Taluka,Village is in 'All' condition
 			document.getElementById("locRadio").style.display = "none";						
-			document.getElementById("regestrationDiv").style.display = "none";
+			document.getElementById("regestrationDiv").style.display = "none";			
 			
 			document.getElementById("villagediv").style.display = "block";
 
