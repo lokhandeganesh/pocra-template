@@ -17,8 +17,31 @@ export default class LegendPanelDashboard extends Component {
 							<th colSpan={2} className="borber" >Legend</th>
 						</tr>
 						<tr>
-							<th colSpan={2}>Activity Symbology </th>
+							<th colSpan={2}>Application Status</th>																				
 						</tr>
+						<tr>
+							<td><img src="pocra_dashboard/dist/legend/dbt_presanction_pending.png" height={'20px'} width={'25px'} alt=""/>  </td>
+	
+							<td>|Presanction Pending</td>
+						</tr>
+						<tr>
+							<td><img src="pocra_dashboard/dist/legend/dbt_presanction_received.png" height={'20px'} width={'25px'} alt=""/>  </td>
+	
+							<td>|Presanction Recieved</td>
+						</tr>
+						<tr>
+							<td><img src="pocra_dashboard/dist/legend/dbt_payment_done.png" height={'20px'} width={'25px'} alt=""/>  </td>
+	
+							<td>|Payment Done</td>
+						</tr>
+						<tr>
+							<td><img src="pocra_dashboard/dist/legend/dbt_work_completed.png" height={'20px'} width={'25px'} alt=""/>  </td>
+	
+							<td>|Work Completed</td>
+						</tr>
+						<tr>
+							<th colSpan={2}></th>							
+						</tr>									
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/APC.png" height={'20px'} width={'25px'} />  </td>
 	
@@ -133,6 +156,7 @@ export default class LegendPanelDashboard extends Component {
 						
 					</table>
 				</div>
+				
 			)
 		}else{
 			return (

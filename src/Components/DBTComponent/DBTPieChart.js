@@ -54,7 +54,8 @@ export default class DBTPieChart extends Component {
 			},
 			tooltip: {
 				pointFormat:
-					"{point.name}: <b>{point.percentage:.1f}%",
+					// "{point.name}: <b>{point.percentage:.1f}%",
+					"<b>{point.percentage:.1f}%",
 				// pointFormat: '{series.name}: <b>{point.y:.0f}</b>'
 			},
 			accessibility: {

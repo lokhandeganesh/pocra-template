@@ -9,6 +9,8 @@ import { ScaleLine, MousePosition, defaults as defaultControls } from 'ol/contro
 import { format } from 'ol/coordinate';
 import { transform } from 'ol/proj';
 import { Image as ImageLayer, Tile as TileLayer, Vector } from 'ol/layer';
+
+import OSM from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS'
 import ImageWMS from 'ol/source/ImageWMS'
 import ReactDOM from 'react-dom';
@@ -125,13 +127,13 @@ export default class DBTFarmerDashboard extends Component {
 			placeholder: '&nbsp;&nbsp; '
 		});
 		// topo layer
+		// add open layer osm map
 		var topo = new TileLayer({
 			title: 'Topo Map',
 			type: 'base',
 			visible: true,
 			source: new XYZ({
-				attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
-					'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+				attributions: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 				url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
 					'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
 				crossOrigin: 'Anonymous',
@@ -426,7 +428,8 @@ export default class DBTFarmerDashboard extends Component {
 								if (jsondata.features[0].properties) {
 									var popupContent = overlay.element.querySelector('#popup-content');
 									popupContent.innerHTML = '';
-									popupContent.innerHTML = '<table id="pointTable" className="table table-bordered" style="border:1px solid black;width: 100%;color:black"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2 >DBT Attribute Information</td></tr><tr><td style="text-align: left">Village </td><td style="text-align: left">' + jsondata.features[0].properties.village_name + '</td></tr><tr><td style="text-align: left">Activity Name  </td><td style="text-align: left">' + jsondata.features[0].properties.activity_name + '</td></tr><tr><td style="text-align: left">Farmer Name </td><td style="text-align: left ">' + (jsondata.features[0].properties.full_name) + '</td></tr><tr><td style="text-align: left">7/12 No. </td><td style="text-align: left ">' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
+
+									popupContent.innerHTML = '<table id="pointTable" className="table table-bordered" style="border:1px solid black;width: 100%;color:black"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td style="text-align: left;">Village :</td><td style="text-align: left">' + jsondata.features[0].properties.village_name + '</td></tr><tr><td style="text-align: left">Activity :</td><td style="text-align: left">' + jsondata.features[0].properties.activity_name + '</td></tr><tr><td style="text-align: left">Farmer :</td><td style="text-align: left ">' + (jsondata.features[0].properties.full_name) + '</td></tr><tr><td style="text-align: left">7/12 No. :</td><td style="text-align: left ">' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
 									overlay.setPosition(coordinate);
 								}
 							} else {
@@ -1790,6 +1793,9 @@ export default class DBTFarmerDashboard extends Component {
 			if (overlay) {
 				map.removeOverlay(overlay);
 			}
+			if (pocraDBTLayer_point) {
+				map.removeLayer(pocraDBTLayer_point)
+			}
 			applicationFor = "no_of_registration";
 
 		}
@@ -1805,6 +1811,9 @@ export default class DBTFarmerDashboard extends Component {
 			if (overlay) {
 				map.removeOverlay(overlay);
 			}
+			if (pocraDBTLayer_point) {
+				map.removeLayer(pocraDBTLayer_point)
+			}
 			applicationFor = "no_of_application";
 
 		} else if (villageRadio === false && regestrationRadio === false && applicationRadio == false && presanctionRadio === true && workCompletedRadio === false && paymentDoneRadio === false && locationRadio === false) {
@@ -1817,6 +1826,9 @@ export default class DBTFarmerDashboard extends Component {
 			document.getElementById("locationRadio").checked = false;
 			if (overlay) {
 				map.removeOverlay(overlay);
+			}
+			if (pocraDBTLayer_point) {
+				map.removeLayer(pocraDBTLayer_point)
 			}
 			applicationFor = "no_of_presanction";
 
@@ -1831,6 +1843,9 @@ export default class DBTFarmerDashboard extends Component {
 			if (overlay) {
 				map.removeOverlay(overlay);
 			}
+			if (pocraDBTLayer_point) {
+				map.removeLayer(pocraDBTLayer_point)
+			}
 			applicationFor = "no_of_work_completed";
 
 		} else if (villageRadio === false && regestrationRadio === false && applicationRadio == false && presanctionRadio === false && workCompletedRadio === false && paymentDoneRadio === true && locationRadio === false) {
@@ -1843,6 +1858,9 @@ export default class DBTFarmerDashboard extends Component {
 			document.getElementById("locationRadio").checked = false;
 			if (overlay) {
 				map.removeOverlay(overlay);
+			}
+			if (pocraDBTLayer_point) {
+				map.removeLayer(pocraDBTLayer_point)
 			}
 			applicationFor = "no_of_paymentdone";
 
@@ -1941,11 +1959,11 @@ export default class DBTFarmerDashboard extends Component {
 			this.getDBTLayerClassValues(activity.value, applicationFor);
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		} else if (activity.value !== "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
-			
+
 			// disable location and regestation radio button when activity selected and District,Taluka,Village is in 'All' condition
-			document.getElementById("locRadio").style.display = "none";						
-			document.getElementById("regestrationDiv").style.display = "none";			
-			
+			document.getElementById("locRadio").style.display = "none";
+			document.getElementById("regestrationDiv").style.display = "none";
+
 			document.getElementById("villagediv").style.display = "block";
 
 			this.setState({
@@ -2114,6 +2132,10 @@ export default class DBTFarmerDashboard extends Component {
 																	<div className="form-group form-inline">
 																		<div className="col-6">
 																			<div class="form-group">
+																				<div class="custom-control custom-radio" id='locRadio' style={{ display: 'none' }}>
+																					<input class="custom-control-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																					<label for="locationRadio" class="custom-control-label" > All Locations</label>
+																				</div>
 																				<div class="custom-control custom-radio" id="villagediv">
 																					<input class="custom-control-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="villageRadio" class="custom-control-label" >PoCRA Villages</label>
@@ -2137,10 +2159,6 @@ export default class DBTFarmerDashboard extends Component {
 																				<div class="custom-control custom-radio">
 																					<input class="custom-control-input" type="radio" id="paymentDoneRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="paymentDoneRadio" class="custom-control-label" > Disbursement</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='locRadio' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="locationRadio" class="custom-control-label" > Locations</label>
 																				</div>
 																			</div>
 																		</div>
