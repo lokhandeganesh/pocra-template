@@ -69,8 +69,8 @@ export default class DBTPieChart extends Component {
 					cursor: 'pointer',
 					size: '50%',
 					height: '100%',
-					allowPointSelect: true,
-					cursor: 'pointer',
+					// allowPointSelect: true,
+					// cursor: 'pointer',
 					// colors: pieColors,
 					dataLabels: {
 						enabled: true,

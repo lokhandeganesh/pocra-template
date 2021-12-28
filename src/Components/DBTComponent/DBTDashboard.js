@@ -18,7 +18,7 @@ import "./DBTDashboard.css"
 import DBTPieChart from './DBTPieChart';
 import Point from 'ol/geom/Point';
 import { Fill, Stroke, RegularShape, Circle, Icon, Text, Style } from 'ol/style';
-import LegendPanelDashboard from './LegendPanelDashboard';
+import LegendPanelDashboard from './LegendPanelHome';
 import select from "select2";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';

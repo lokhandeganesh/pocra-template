@@ -32,12 +32,12 @@ export default class LegendPanelDashboard extends Component {
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_payment_done.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Payment Done</td>
+							<td>|Work Completed</td>
 						</tr>
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_work_completed.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Work Completed</td>
+							<td>|Disbursed</td>
 						</tr>
 						<tr>
 							<th colSpan={2}></th>							
