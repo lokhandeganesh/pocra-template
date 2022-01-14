@@ -493,7 +493,7 @@ class Forecast extends Component {
 								<div className="col-sm-6">
 									<label style={{ paddingTop: 9, color: "rgb(248, 112, 33)" }}>IMD Weather Forecast (  {Moment(this.state.minimumdate).format('DD-MM-YYYY')} - {Moment(this.state.maxdate).format('DD-MM-YYYY')} )</label>
 								</div>
-								<div className="col-sm-6 float-sm-right">
+								<div className="col-sm-6 float-sm-right" style={{backgroundColor: 'grey',}}>
 									<ol className="breadcrumb float-sm-right">
 										<li className="nav-item dropdown">
 											<div className="form-group" style={{ padding: 5 }}>

@@ -18,7 +18,7 @@ import "./DBTDashboard.css"
 import DBTPieChart from './DBTPieChart';
 import Point from 'ol/geom/Point';
 import { Fill, Stroke, RegularShape, Circle, Icon, Text, Style } from 'ol/style';
-import LegendPanelDashboard from './LegendPanelHome';
+import LegendPanelHome from './LegendPanelHome';
 import select from "select2";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
@@ -725,7 +725,7 @@ export default class DBTDashboard extends Component {
 			.then(response => {
 				return response.json();
 			}).then(data => {
-				console.log(data)
+				// console.log(data)
 				vectorSource = new VectorSource({})
 				data.activity.map((activities) => {
 					if (applicationFor === "no_of_application") {
@@ -891,7 +891,7 @@ export default class DBTDashboard extends Component {
 			.then(response => {
 				return response.json();
 			}).then(data => {
-				console.log(data)
+				// console.log(data)
 				var labelValue = "";
 				if (applicationFor === "no_of_application") {
 					labelValue = "Applications";
@@ -942,7 +942,7 @@ export default class DBTDashboard extends Component {
 			.then(response => {
 				return response.json();
 			}).then(data => {
-				console.log(data)
+				// console.log(data)
 				var labelValue = "";
 				if (applicationFor === "no_of_application") {
 					labelValue = "Applications";
@@ -1971,7 +1971,7 @@ export default class DBTDashboard extends Component {
 									{/* /.card-header */}
 									<div className="card-body">
 										<div className="row">
-											<section className="content col-3" style={{ position: "absolute", zIndex: "9", top: "8%", left: "1%" }}>
+											<section className="content col-3" style={{ position: "absolute", zIndex: "9", top: "8%", left: "1%", width: "18%" }}>
 												<div className="container-fluid">
 													{/* SELECT2 EXAMPLE */}
 													<div className="card card-default" style={{ marginTop: "0.5%" }}>
@@ -1987,7 +1987,7 @@ export default class DBTDashboard extends Component {
 															<div className="row">
 																<div className="col-12">
 																	<div className="form-group form-inline">
-																		<div className="col-6">
+																		<div className="col-12">
 																			<div class="form-group">
 																				<div class="custom-control custom-radio" id="villagediv">
 																					<input class="custom-control-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
@@ -2034,7 +2034,7 @@ export default class DBTDashboard extends Component {
 												<div id="popup-content" />
 											</div>
 											<div id={"legend"} className="box stack-top">
-												<LegendPanelDashboard props={this.state.classValues} />
+												<LegendPanelHome props={this.state.classValues} />
 											</div>
 											<section className="content col-sm-5" style={{ position: "absolute", zIndex: "9", top: "20%", right: "0%" }} id="infoTable">
 											</section>

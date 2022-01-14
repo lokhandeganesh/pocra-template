@@ -6,21 +6,22 @@ export default class Sidebar extends Component {
 
     render() {
         const items = [
-            { name: 'home', css: 'nav-icon fas fa-home', label: 'Home' },
-            { name: 'forecast', css: 'nav-icon fas fa-cloud-moon-rain', label: 'Weather Forecast' },
-            // { name: 'soilcard', css: 'nav-icon fas fa-copy', label: 'मृद आरोग्य पत्रिका ' },
-            // { name: 'dbt', css: 'nav-icon fas fa-tachometer-alt', label: 'PoCRA DBT' },
+            { name: 'home', css: 'nav-icon fas fa-home', label: 'Home' },           
             {
                 name: '#',
                 label: 'DBT',
                 css: 'nav-icon fas fa-rupee-sign',
                 items: [
                     { name: 'dbtfarmer', label: 'Farmer', css: 'nav-icon fas fa-tractor', style:'color:white ! important' },
+                    // <a href="https://icons8.com/icon/Y0OtRmz8nX1e/cultivation">Cultivation icon by Icons8</a>
                     { name: 'nrm', label: 'Community', css: 'nav-icon fas fa-users' },
                     { name: 'fpc_fpo', label: 'FPC/FPO', css: 'nav-icon fas fa-store-alt' },
 
                 ],
-            }
+            },
+            { name: 'forecast', css: 'nav-icon fas fa-cloud-moon-rain', label: 'Weather Forecast' },
+            // { name: 'soilcard', css: 'nav-icon fas fa-copy', label: 'मृद आरोग्य पत्रिका ' },
+            // { name: 'dbt', css: 'nav-icon fas fa-tachometer-alt', label: 'PoCRA DBT' },
         ]
         return (
            

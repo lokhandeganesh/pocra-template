@@ -5,7 +5,6 @@ export default class LegendPanelDashboard extends Component {
 	constructor(props) {
 		super(props)
 
-
 	}
 
 	render() {
@@ -22,22 +21,22 @@ export default class LegendPanelDashboard extends Component {
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_presanction_pending.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Presanction Pending</td>
+							<td>Presanction Pending</td>
 						</tr>
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_presanction_received.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Presanction Recieved</td>
+							<td>Presanction Recieved</td>
 						</tr>
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_payment_done.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Work Completed</td>
+							<td>Work Completed</td>
 						</tr>
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/dbt_work_completed.png" height={'20px'} width={'25px'} alt=""/>  </td>
 	
-							<td>|Disbursed</td>
+							<td>Disbursed</td>
 						</tr>
 						<tr>
 							<th colSpan={2}></th>							

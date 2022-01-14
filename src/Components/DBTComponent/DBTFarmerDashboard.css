@@ -60,4 +60,7 @@
 /* Mouse cursor style to pointer */
 .custom-control-label,.select2{
 	cursor:pointer;
-}
+} 
+.text{
+	mso-number-format:"\@";/*force text*/
+  }
