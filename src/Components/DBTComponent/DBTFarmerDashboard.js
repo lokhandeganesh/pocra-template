@@ -238,10 +238,6 @@ export default class DBTFarmerDashboard extends Component {
 			var workDoneLocationRadio = document.getElementById("workRadio").checked;
 			var disburstmentLocationRadio = document.getElementById("disbursRadio").checked;
 
-
-
-
-
 			var infoTabled = document.getElementById("infoTable");
 
 			$(document).ready(function () {
@@ -471,7 +467,7 @@ export default class DBTFarmerDashboard extends Component {
 									popupContent.innerHTML = '';
 
 									popupContent.innerHTML =
-										'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village :</td><td>' + jsondataFeatureProp.village_name + '</td></tr><tr><td >Activity :</td><td>' + jsondataFeatureProp.activity_name + '</td></tr><tr><td>Farmer :</td><td>' + (jsondataFeatureProp.full_name) + '</td></tr><tr><td>7/12 Number :</td><td class="text">' + (jsondataFeatureProp.use_712_no) + '</td></tr><tr><td>Activity Image :</td><td><a href="' + (jsondataFeatureProp.img_url) + '" target="_blank" ><img src="' + (jsondataFeatureProp.img_url) + '"class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';
+										'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village</td><td>' + jsondataFeatureProp.village_name + '</td></tr><tr><td >Activity</td><td>' + jsondataFeatureProp.activity_name + '</td></tr><tr><td>Farmer</td><td>' + (jsondataFeatureProp.full_name) + '</td></tr><tr><td>7/12 No.</td><td class="text">' + (jsondataFeatureProp.use_712_no) + '</td></tr><tr><td colspan=2><img src="' + (jsondataFeatureProp.img_url) + '"class="img-fluid" alt="Activity Image"></td></tr> </table></div>';
 
 									overlay.setPosition(coordinate);
 								}
@@ -534,29 +530,36 @@ export default class DBTFarmerDashboard extends Component {
 				if (url_point) {
 					fetch(url_point)
 						.then((response) => {
-							// console.log(response.text());
 							return response.text();
 						})
 						.then((html) => {
 							var jsondata = JSON.parse(html);
 							var jsondataFeatureProp = jsondata.features[0].properties;
+
+							var img_url = jsondataFeatureProp.img_url;
+
+							// var request = require('request');
+							// request(img_url, { method: 'HEAD' }, function (err, res, body) {
+							// 	console.log(res.headers);
+							// });
 							// console.log(jsondata.features[0].properties)
 							if (jsondata.features[0]) {
 								if (jsondata.features[0].properties) {
 									var popupContent = overlay.element.querySelector('#popup-content');
+
 									popupContent.innerHTML = '';
 									popupContent.innerHTML =
-										'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village :</td><td>' + jsondataFeatureProp.village_name + '</td></tr><tr><td >Activity :</td><td>' + jsondataFeatureProp.activity_name + '</td></tr><tr><td>Farmer :</td><td>' + (jsondataFeatureProp.full_name) + '</td></tr><tr><td>7/12 Number :</td><td class="text">' + (jsondataFeatureProp.use_712_no) + '</td></tr><tr><td>Activity Image :</td><td><a href="' + (jsondataFeatureProp.img_url) + '" target="_blank" ><img src="' + (jsondataFeatureProp.img_url) + '"class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';
+										'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village</td><td>' + jsondataFeatureProp.village_name + '</td></tr><tr><td >Activity</td><td>' + jsondataFeatureProp.activity_name + '</td></tr><tr><td>Farmer</td><td>' + (jsondataFeatureProp.full_name) + '</td></tr><tr><td>7/12 No.</td><td class="text">' + (jsondataFeatureProp.use_712_no) + '</td></tr><tr><td colspan=2><a data-toggle="modal" data-target="#myModal" href="' + (jsondataFeatureProp.img_url) + '" data-featherlight="' + jsondataFeatureProp.img_ur + '"><img src="' + (jsondataFeatureProp.img_url) + '" class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';
 
-									// '<table style="width:100%;border: 1px solid black;border-collapse: collapse;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr>' +
-									// 	'<tr><td style="border: 1px solid black;border-collapse: collapse;">Village</td><td style="border: 1px solid black;border-collapse: collapse;">' + jsondata.features[0].properties.village_name + '</td></tr>' +
-									// 	'<tr><td style="border: 1px solid black;border-collapse: collapse;">Activity</td><td style="border: 1px solid black;border-collapse: collapse;">' + jsondata.features[0].properties.activity_name + '</td></tr>' +
-									// 	'<tr><td style="border: 1px solid black;border-collapse: collapse;">Farmer</td><td style="border: 1px solid black;border-collapse: collapse;">' + (jsondata.features[0].properties.full_name) + '</td></tr>' +
-									// 	'<tr><td style="border: 1px solid black;border-collapse: collapse;">7/12 No.</td><td style="border: 1px solid black;border-collapse: collapse;">' + (jsondata.features[0].properties.use_712_no) + '</td></tr>' +
-									// 	// '<tr><td style="border: 1px solid black;border-collapse: collapse;">Image</td><td style="border: 1px solid black;border-collapse: collapse;"><img src="pocra_dashboard/dist/legend/appl_5.png"></td></tr>' +
-									// 	'</table>';
+										$('#dimg').attr('src',img_url);
 
-									// '<table className="table table-bordered"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village :</td><td>' + jsondata.features[0].properties.village_name + '</td></tr><tr><td >Activity :</td><td>' + jsondata.features[0].properties.activity_name + '</td></tr><tr><td>Farmer :</td><td>' + (jsondata.features[0].properties.full_name) + '</td></tr><tr><td>7/12 No. :</td><td>' + (jsondata.features[0].properties.use_712_no) + '</td></tr></table>';
+
+									// '</td></tr><tr><td colspan=2><img src="' + (jsondataFeatureProp.img_url) + '"class="img-fluid" alt="Activity Image"></td></tr> </table></div>';
+
+									// popupContent.innerHTML =
+									// 	'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village :</td><td>' + jsondataFeatureProp.village_name + '</td></tr><tr><td >Activity :</td><td>' + jsondataFeatureProp.activity_name + '</td></tr><tr><td>Farmer :</td><td>' + (jsondataFeatureProp.full_name) + '</td></tr><tr><td>7/12 Number :</td><td class="text">' + (jsondataFeatureProp.use_712_no) + '</td></tr><tr><td><a target="_blank" href="' + img_url + '" >Click Me</a></td><td colspan=2><img src="' + img_url + '" class="img-fluid" data-featherlight="' + img_url + '" alt="Activity Image"></td></tr> </table></div>';
+
+									// <a href="' + (jsondataFeatureProp.img_url) + '" data-featherlight="'+jsondataFeatureProp.img_ur+'"><img src="' + (jsondataFeatureProp.img_url) + '"class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';									
 									overlay.setPosition(coordinate);
 								}
 							} else {
@@ -2722,6 +2725,20 @@ export default class DBTFarmerDashboard extends Component {
 			<div>
 				<div className="content-wrapper">
 					{/* Content Header (Page header) */}
+
+					{/* pop up model for image click event  */}
+					<div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								
+								<div class="modal-body">
+									<img id='dimg' src="" class="img-fluid" alt="Activity Image" />
+								</div>
+								
+							</div>
+						</div>
+					</div>
+
 					<section className="content-header">
 						<section className="content">
 							<div className="container-fluid">
@@ -2801,11 +2818,15 @@ export default class DBTFarmerDashboard extends Component {
 																	<div className="form-group form-inline">
 																		<div className="col-12">
 																			<div class="form-group">
+																				{/* <div class="btn-group-vertical">
+																					<button type="button" class="btn btn-primary">PoCRA Villages</button>
+																					<button type="button" class="btn btn-primary">Registrations</button>
+																					<button type="button" class="btn btn-primary">Applications</button>
+																				</div> */}
 																				<div class="custom-control custom-radio" id='loc-Radio-Div' style={{ display: 'none' }}>
 																					<input class="custom-control-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="locationRadio" class="custom-control-label" >All Locations</label>
 																				</div>
-																				{/*  */}
 																				<div class="custom-control custom-radio" id='pre-san-pend-Radio-Div' style={{ display: 'none' }}>
 																					<input class="custom-control-input" type="radio" id="pendingRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="pendingRadio" class="custom-control-label" >Pre-Sanction Pending</label>
@@ -2824,7 +2845,6 @@ export default class DBTFarmerDashboard extends Component {
 																					<h5>-----------------</h5>
 																				</div>
 
-																				{/*  */}
 																				<div class="custom-control custom-radio" id="villagediv">
 																					<input class="custom-control-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
 																					<label for="villageRadio" class="custom-control-label" >PoCRA Villages</label>

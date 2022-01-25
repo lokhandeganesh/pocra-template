@@ -11,6 +11,7 @@
     "axios": "^0.21.4",
     "bootstrap": "^5.1.0",
     "datatables.net-dt": "^1.1.0",
+    "featherlight": "^1.7.14",
     "highcharts": "^9.2.2",
     "highcharts-react-official": "^3.0.0",
     "immer": "^9.0.6",
@@ -30,6 +31,7 @@
     "react-select": "^3.1.0",
     "react-table": "^7.7.0",
     "reactstrap": "^8.9.0",
+    "request": "^2.88.2",
     "select2": "^4.1.0-rc.0",
     "web-vitals": "^1.1.2"
   },
