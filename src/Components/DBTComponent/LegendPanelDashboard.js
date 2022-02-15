@@ -72,11 +72,6 @@ export default class LegendPanelDashboard extends Component {
 							{/* <td>Farm Pond (Individual)</td> */}
 							<td>Farm Pond</td>
 						</tr>
-						{/* <tr>
-							<td><img src="pocra_dashboard/dist/legend/FPL.png" height={'20px'} width={'25px'} />  </td>
-	
-							<td>Farm Pond Lining</td>
-						</tr> */}
 						<tr>
 							<td><img src="pocra_dashboard/dist/legend/OTH.png" height={'20px'} width={'25px'} />  </td>
 	
@@ -157,7 +152,8 @@ export default class LegendPanelDashboard extends Component {
 				</div>
 				
 			)
-		}else{
+		}
+		else{
 			return (
 				<div>
 					<table >
@@ -192,16 +188,10 @@ export default class LegendPanelDashboard extends Component {
 	
 							<td>{this.props.props.appl_4 + 1} - and above </td>
 						</tr>
-						{/* <tr>
-							<td><img src="pocra_dashboard/dist/legend/appl_6.png" height={'20px'} width={'25px'} />  </td>
-	
-							<td>{this.props.props.appl_5 + 0.1} - and above </td>
-						</tr> */}
 					</table>
 				</div>
 			)
-		}
-		
+		}		
 
 	}
 }

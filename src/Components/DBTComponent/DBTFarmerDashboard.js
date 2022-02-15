@@ -30,6 +30,8 @@ import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery';
 
+import { ImageViewer } from "react-image-viewer-dv"
+
 
 // Variable Declaration
 
@@ -227,10 +229,10 @@ export default class DBTFarmerDashboard extends Component {
 
 			// Location buttons
 			var allLocationRadio = document.getElementById("locationRadio").checked;
-			var preSanctionPendingRadio = document.getElementById("pendingRadio").checked;
-			var preSanctionRecievedRadio = document.getElementById("RecvRadio").checked;
-			var workDoneLocationRadio = document.getElementById("workRadio").checked;
-			var disburstmentLocationRadio = document.getElementById("disbursRadio").checked;
+			var preSanPendLocRadio = document.getElementById("pendingRadio").checked;
+			var preSanRecLocRadio = document.getElementById("RecvRadio").checked;
+			var workDoneLocRadio = document.getElementById("workRadio").checked;
+			var disbLocRadio = document.getElementById("disbursRadio").checked;
 
 			var infoTabled = document.getElementById("infoTable");
 
@@ -389,7 +391,7 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanctionPendingRadio === true || preSanctionRecievedRadio === true || workDoneLocationRadio === true || disburstmentLocationRadio === true) {
+			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
 				console.log("button check")
 				// imgSource
 				// document.getElementById("tableSection").style.display = "block";
@@ -481,7 +483,7 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanctionPendingRadio === true || preSanctionRecievedRadio === true || workDoneLocationRadio === true || disburstmentLocationRadio === true) {
+			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
 				// imgSource
 				// document.getElementById("tableSection").style.display = "block";
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
@@ -694,6 +696,7 @@ export default class DBTFarmerDashboard extends Component {
 			});
 
 	}
+
 	// add taluka count on map
 	getDBTVectorLayerTaluka(activityId, districtCode, applicationFor) {
 		if (vectorSource) {
@@ -799,6 +802,7 @@ export default class DBTFarmerDashboard extends Component {
 			});
 
 	}
+
 	// add village count on map
 	getDBTVectorLayerVillage(activityId, districtCode, talukaCode, applicationFor) {
 
@@ -901,6 +905,7 @@ export default class DBTFarmerDashboard extends Component {
 				map.addLayer(featurelayer)
 			});
 	}
+
 	// add single village count on map (Vector)
 	getDBTVectorLayerVillageData(activityId, districtCode, talukaCode, villageCode, applicationFor) {
 
@@ -1113,6 +1118,7 @@ export default class DBTFarmerDashboard extends Component {
 			});
 
 	}
+
 	// pass data to legend and load village map 
 	getDBTLayerClassValuesVillage(activityId, districtCode, talukaCode, applicationFor) {
 
@@ -1164,6 +1170,7 @@ export default class DBTFarmerDashboard extends Component {
 			});
 
 	}
+
 	// pass data to legend and load single village map 
 	getDBTLayerClassValuesVillageData(activityId, districtCode, talukaCode, villageCode, applicationFor) {
 
@@ -1309,6 +1316,7 @@ export default class DBTFarmerDashboard extends Component {
 			map.addLayer(pocraDBTLayer);
 		}
 	}
+
 	// function to add map at taluka level
 	loadMapTaluka = (initialActivity, layerName, activityId, paramName, paramValue, applicationFor) => {
 
@@ -1402,6 +1410,7 @@ export default class DBTFarmerDashboard extends Component {
 
 
 	}
+
 	// function to add map at village level
 	loadMapVillage = (initialActivity, layerName, activityId, paramValue, talukaCode, applicationFor) => {
 
@@ -1732,6 +1741,7 @@ export default class DBTFarmerDashboard extends Component {
 		this.updateHeaderLabel();
 
 	}
+
 	// load pocra village
 	getVillage(event) {
 		document.getElementById("infoTable").innerHTML = "";
@@ -1953,10 +1963,10 @@ export default class DBTFarmerDashboard extends Component {
 
 		map.addLayer(pocraDBTLayer_point_status);
 	}
-	
+
 	// get village profile for vincod from api 
-	getVillageProfile(vincode){
-		$("#villProf").on("click", (function () {				
+	getVillageProfile(vincode) {
+		$("#villProf").on("click", (function () {
 			// vincode = village.value
 
 			var villProfApi = {
@@ -1975,9 +1985,9 @@ export default class DBTFarmerDashboard extends Component {
 				var villProfUrl = response.data;
 				window.open(villProfUrl, '_blank');
 
-			});	
+			});
 		}
-		));	
+		));
 	}
 
 	// logic to display data on radio and dropdown change
@@ -2013,7 +2023,7 @@ export default class DBTFarmerDashboard extends Component {
 		var pendingRadio = document.getElementById("pendingRadio").checked;
 		var RecvRadio = document.getElementById("RecvRadio").checked;
 		var workRadio = document.getElementById("workRadio").checked;
-		var disbursRadio = document.getElementById("disbursRadio").checked;		
+		var disbursRadio = document.getElementById("disbursRadio").checked;
 
 		// WMS Layers display
 		if (villageRadio === true && regestrationRadio === false && applicationRadio == false && presanctionRadio === false && workCompletedRadio === false && paymentDoneRadio === false && locationRadio === false && pendingRadio === false && RecvRadio === false && workRadio === false && disbursRadio === false) {
@@ -2711,29 +2721,7 @@ export default class DBTFarmerDashboard extends Component {
 			// passing vincode to getVillageProfile function
 			this.getVillageProfile(village.value)
 
-			// $("#villProf").on("click", (function () {				
-			// 	vincode = village.value
-
-			// 	var villProfApi = {
-			// 		"url": "http://sso.mahapocra.gov.in/masterService/village-profile-pdf",
-			// 		"method": "POST",
-			// 		"timeout": 0,
-			// 		"headers": {
-			// 			"Content-Type": "application/json"
-			// 		},
-			// 		"data": JSON.stringify({
-			// 			"census_code": vincode
-			// 		}),
-			// 	};
-
-			// 	$.ajax(villProfApi).done(function (response) {
-			// 		var villProfUrl = response.data;
-			// 		window.open(villProfUrl, '_blank');
-
-			// 	});	
-			// }
-			// ));
-
+			// enable location div's on village level
 			document.getElementById("loc-Radio-Div").style.display = "block";
 			document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
 			document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
@@ -2759,6 +2747,7 @@ export default class DBTFarmerDashboard extends Component {
 			// passing vincode to getVillageProfile function
 			this.getVillageProfile(village.value)
 
+			// enable location div's on village level
 			document.getElementById("loc-Radio-Div").style.display = "block";
 			document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
 			document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
@@ -2782,21 +2771,24 @@ export default class DBTFarmerDashboard extends Component {
 		return (
 			<div>
 				<div className="content-wrapper">
-					{/* Content Header (Page header) */}
-
-					{/* pop up model for image click event  */}
+					{/* Content Header (Page header) */}					
 
 					<div class="modal fade" id="myModal" role="dialog">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
-
-								<div class="modal-body">
+								<div class="modal-body" style={{background:'darkgrey'}} >
 									<img id='model_img' src="" class="img-fluid" alt="Activity Image" />
 								</div>
 
 							</div>
 						</div>
 					</div>
+					{/* pop up model for image click event  */}
+					{/* <div class="modal fade" id="myModal" role="dialog">
+						<ImageViewer>
+							<img id='model_img' src="" alt="Activity Image" />
+						</ImageViewer>
+					</div> */}
 
 					{/* Main page */}
 					<section className="content-header">
@@ -2808,9 +2800,9 @@ export default class DBTFarmerDashboard extends Component {
 										<h3 className="card-title"><b>Farmer Activity</b></h3>
 										<div className="card-tools">
 											<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
-											{/* <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" /></button> */}
 										</div>
 									</div>
+
 									{/* /.card-header */}
 									<div className="card-body">
 										<div className="row" style={{ marginBottom: "-16px" }}>
@@ -2837,7 +2829,7 @@ export default class DBTFarmerDashboard extends Component {
 														</select>
 
 													</div>
-													<div className="col-md-2" id="villProfDiv">
+													<div className="col-md-2" style={{ width: "100%", fontSize: "14px", marginLeft: "0.2%" }} id="villProfDiv">
 														<div class="btn-group-vertical">
 															<button type="button" class="btn btn-primary glow-button" id="villProf">Village Profile</button>
 														</div>
@@ -2851,6 +2843,7 @@ export default class DBTFarmerDashboard extends Component {
 							</div>
 						</section>
 					</section>
+					{/* Map div */}
 					<section className="content-header" style={{ marginTop: "-50px" }}>
 						<section className="content">
 							<div className="container-fluid">
@@ -2860,90 +2853,102 @@ export default class DBTFarmerDashboard extends Component {
 										<h3 className="card-title"><b>{this.state.graphLabel}</b></h3>
 										<div className="card-tools">
 											<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
-											{/* <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" /></button> */}
 										</div>
 									</div>
-									{/* /.card-header */}
-									<div className="card-body">
-										<div className="row">
-											<section className="content col-3" style={{ position: "absolute", zIndex: "9", top: "6%", left: "1%", width: "18%" }}>
-												<div className="container-fluid">
-													{/* SELECT2 EXAMPLE */}
-													<div className="card card-default" style={{ marginTop: "0.5%" }}>
-														<div className="card-header" >
-															<h3 className="card-title"><b>Attributes</b></h3>
-															<div className="card-tools">
-																<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
-																{/* <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" /></button> */}
-															</div>
-														</div>
-														{/* /.card-header */}
-														<div className="card-body">
-															<div className="row">
-																<div className="col-12">
-																	<div className="form-group form-inline">
-																		<div className="col-12">
-																			<div class="form-group">
-																				{/* <div class="btn-group-vertical">
-																					<button type="button" class="btn btn-primary">PoCRA Villages</button>
-																					<button type="button" class="btn btn-primary">Registrations</button>
-																					<button type="button" class="btn btn-primary">Applications</button>
-																				</div> */}
-																				<div class="custom-control custom-radio" id='loc-Radio-Div' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="locationRadio" class="custom-control-label" >All Locations</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='pre-san-pend-Radio-Div' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="pendingRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="pendingRadio" class="custom-control-label" >Pre-Sanction Pending</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='pre-san-recv-Radio-Div' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="RecvRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="RecvRadio" class="custom-control-label" >Pre-Sanction Received</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='work-comp-Radio-Div' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="workRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="workRadio" class="custom-control-label" >Work Completed</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='disburst-Radio-Div' style={{ display: 'none' }}>
-																					<input class="custom-control-input" type="radio" id="disbursRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="disbursRadio" class="custom-control-label" >Payment Disbursed</label>
-																					<h5>-----------------</h5>
-																				</div>
 
-																				<div class="custom-control custom-radio" id="villagediv">
-																					<input class="custom-control-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="villageRadio" class="custom-control-label" >PoCRA Villages</label>
-																				</div>
-																				<div class="custom-control custom-radio" id='regestrationDiv'>
-																					<input class="custom-control-input" type="radio" id="regestrationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="regestrationRadio" class="custom-control-label" >Registrations</label>
-																				</div>
-																				<div class="custom-control custom-radio">
-																					<input class="custom-control-input" type="radio" id="applicationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="applicationRadio" class="custom-control-label" >Applications</label>
-																				</div>
-																				<div class="custom-control custom-radio">
-																					<input class="custom-control-input" type="radio" id="presanctionRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="presanctionRadio" class="custom-control-label" >PreSanction</label>
-																				</div>
-																				<div class="custom-control custom-radio">
-																					<input class="custom-control-input" type="radio" id="workCompletedRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="workCompletedRadio" class="custom-control-label" >Work Completed</label>
-																				</div>
-																				<div class="custom-control custom-radio">
-																					<input class="custom-control-input" type="radio" id="paymentDoneRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																					<label for="paymentDoneRadio" class="custom-control-label">Disbursement</label>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+									{/* Attributes button controls */}
+									<section className="content">
+										<div className="card card-default" style={{ marginTop: "0.1%" }}>
+											<div className="card-header bg-info text-white">
+												<h3 className="card-title "><b>Attributes</b></h3>
+												<div className="card-tools">
+													<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
+												</div>
+											</div>
+											{/* <div class="col-sm-6"></div> */}
+											<div className="card-body" >
+												<div className="row" style={{ marginBottom: "-16px", fontWeight: 'bold', marginLeft: "1px" }}>
+													<div className="col-md-12">
+														<div className="form-group form-inline ">
+															<div className="margin2 form-check form-check-inline col-md-2" id="villagediv">
+																<input class="form-check-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="villageRadio">PoCRA Villages</label>
+															</div>
+
+															<div className="margin2 form-check form-check-inline col-md-2" id='regestrationDiv'>
+																<input class="form-check-input" type="radio" id="regestrationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="regestrationRadio">Registrations</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2" >
+																<input class="form-check-input" type="radio" id="applicationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="applicationRadio">Applications</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2">
+																<input class="form-check-input" type="radio" id="presanctionRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="presanctionRadio">Pre Sanction</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2">
+																<input class="form-check-input" type="radio" id="workCompletedRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="workCompletedRadio">Work Completed</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2">
+																<input class="form-check-input" type="radio" id="paymentDoneRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="paymentDoneRadio">Disbursement</label>
 															</div>
 														</div>
 													</div>
 												</div>
-											</section>
+											</div>
+										</div>
+									</section>
+
+									{/* Points button controls */}
+									<section className="content">
+										<div className="card card-default" style={{ marginTop: "0.1%" }}>
+											<div className="card-header bg-success text-white">
+												<h3 className="card-title "><b>Point Locations</b></h3>
+												<div className="card-tools">
+													<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
+												</div>
+											</div>
+
+											<div className="card-body" >
+												<div className="row" style={{ marginBottom: "-16px", fontWeight: 'bold', marginLeft: "1px" }}>
+													<div className="col-md-12">
+														<div className="form-group form-inline ">
+															<div className="margin2 form-check form-check-inline col-md-2" id='loc-Radio-Div' >
+																<input class="form-check-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="locationRadio">All Locations</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2" id='pre-san-pend-Radio-Div' >
+																<input class="form-check-input" type="radio" id="pendingRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="pendingRadio">Pre-Sanction Pending</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2" id='pre-san-recv-Radio-Div' >
+																<input class="form-check-input" type="radio" id="RecvRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="RecvRadio">Pre-Sanction Received</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2" id='work-comp-Radio-Div' >
+																<input class="form-check-input" type="radio" id="workRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="workRadio">Work Completed</label>
+															</div>
+															<div className="margin2 form-check form-check-inline col-md-2" id='disburst-Radio-Div' >
+																<input class="form-check-input" type="radio" id="disbursRadio" name="customRadio" onChange={this.updateHeaderLabel} />
+																<label class="form-check-label" for="disbursRadio">Payment Disbursed</label>
+															</div>
+
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</section>
+
+
+									{/* /.Legend Panel */}
+									<div className="card-body">
+										<div className="row">
 											<div className="col-12" id="map" style={{ height: "70vh", width: "100%" }}>
 											</div>
 											<div id="popup" className="ol-popup">
@@ -2955,19 +2960,18 @@ export default class DBTFarmerDashboard extends Component {
 											<div id={"legend"} className="box stack-top">
 												<LegendPanelDashboard props={this.state.classValues} />
 											</div>
-											{/* <div id={"legend"} className="box stack-top">
-													<LengendPanelPoints props={this.state.pointLegend} />
-											</div> */}
 											<section className="content col-sm-5" style={{ position: "absolute", zIndex: "9", top: "20%", right: "0%" }} id="infoTable">
 											</section>
-
 										</div>
 									</div>
+
 								</div>
 							</div>
-						</section>
-					</section>
-					<section className="content-header" style={{ marginTop: "-50px" }}>
+						</section >
+					</section >
+					{/* Charts div */}
+					< section className="content-header" style={{ marginTop: "-50px" }
+					}>
 						<section className="content">
 							<div className="container-fluid">
 								{/* SELECT2 EXAMPLE */}
@@ -2979,7 +2983,6 @@ export default class DBTFarmerDashboard extends Component {
 											{/* <button type="button" className="btn btn-tool" data-card-widget="remove"><i className="fas fa-times" /></button> */}
 										</div>
 									</div>
-
 									{/* Pie Chart */}
 									<div className="card-body">
 										<div className="row">
@@ -3001,13 +3004,13 @@ export default class DBTFarmerDashboard extends Component {
 										</div>
 									</div>
 								</div>
-							</div>{/* /.container-fluid */}
+							</div>
 						</section>
-					</section>
+					</section >
 
-				</div>
+				</div >
 
-			</div>
+			</div >
 		)
 	}
 }

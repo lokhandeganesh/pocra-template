@@ -1,3 +1,17 @@
+/* Content of modal div is center aligned */
+.modal {
+	text-align: center;
+}
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+ }
+  
+ .card {
+	 flex: 0 1 24%;
+ }
+ 
 .selectlabel {
 	width: 180px;
 	padding: 2%;
