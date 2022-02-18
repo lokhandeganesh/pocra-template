@@ -48,11 +48,6 @@ export default class LegendPanelHome extends Component {
 	
 							<td>{this.props.props.appl_4 + 1} - and above </td>
 						</tr>
-						{/* <tr>
-							<td><img src="dist/legend/appl_6.png" height={'20px'} width={'25px'} />  </td>
-	
-							<td>{this.props.props.appl_5 + 0.1} - and above </td>
-						</tr> */}
 					</table>
 				</div>
 			)

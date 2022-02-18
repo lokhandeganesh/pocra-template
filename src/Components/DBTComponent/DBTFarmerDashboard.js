@@ -392,14 +392,29 @@ export default class DBTFarmerDashboard extends Component {
 						});
 				}
 			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
-				console.log("button check")
+				// console.log("button check")
 				// imgSource
-				// document.getElementById("tableSection").style.display = "block";
-				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
-					evt.coordinate,
-					viewResolution,
-					'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
-				);
+				if (allLocationRadio == true) {
+					var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+						evt.coordinate,
+						viewResolution,
+						'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+					);
+
+				}
+				else {
+					var url = pocraDBTLayer_point_status.getSource().getFeatureInfoUrl(
+						evt.coordinate,
+						viewResolution,
+						'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+					);
+				}
+				// var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+				// 	evt.coordinate,
+				// 	viewResolution,
+				// 	'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+				// );
+
 				if (url) {
 					fetch(url)
 						.then((response) => {
@@ -437,11 +452,26 @@ export default class DBTFarmerDashboard extends Component {
 				const coordinate = evt.coordinate;
 
 				var viewResolution = (view.getResolution());
-				var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
-					evt.coordinate,
-					viewResolution,
-					'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
-				);
+
+				if (allLocationRadio == true) {
+					var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
+						evt.coordinate,
+						viewResolution,
+						'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+					);
+				}
+				else {
+					var url_point = pocraDBTLayer_point_status.getSource().getFeatureInfoUrl(
+						evt.coordinate,
+						viewResolution,
+						'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+					);
+				}
+				// var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
+				// 	evt.coordinate,
+				// 	viewResolution,
+				// 	'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+				// );
 
 				if (url_point) {
 					fetch(url_point)
@@ -1990,6 +2020,10 @@ export default class DBTFarmerDashboard extends Component {
 		));
 	}
 
+	// For dynamic legend
+	// getDynamicLegend(){
+	// }
+
 	// logic to display data on radio and dropdown change
 	updateHeaderLabel() {
 		var activity = document.getElementById("activity");
@@ -2771,12 +2805,12 @@ export default class DBTFarmerDashboard extends Component {
 		return (
 			<div>
 				<div className="content-wrapper">
-					{/* Content Header (Page header) */}					
+					{/* Content Header (Page header) */}
 
 					<div class="modal fade" id="myModal" role="dialog">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
-								<div class="modal-body" style={{background:'darkgrey'}} >
+								<div class="modal-body" style={{ background: 'darkgrey' }} >
 									<img id='model_img' src="" class="img-fluid" alt="Activity Image" />
 								</div>
 
@@ -2858,7 +2892,7 @@ export default class DBTFarmerDashboard extends Component {
 
 									{/* Attributes button controls */}
 									<section className="content">
-										<div className="card card-default" style={{ marginTop: "0.1%" }}>
+										<div className="card card-default" style={{ margin: "0.1%" }}>
 											<div className="card-header bg-info text-white">
 												<h3 className="card-title "><b>Attributes</b></h3>
 												<div className="card-tools">
@@ -2904,7 +2938,7 @@ export default class DBTFarmerDashboard extends Component {
 
 									{/* Points button controls */}
 									<section className="content">
-										<div className="card card-default" style={{ marginTop: "0.1%" }}>
+										<div className="card card-default" style={{ margin: "0.1%" }}>
 											<div className="card-header bg-success text-white">
 												<h3 className="card-title "><b>Point Locations</b></h3>
 												<div className="card-tools">
@@ -2945,7 +2979,6 @@ export default class DBTFarmerDashboard extends Component {
 										</div>
 									</section>
 
-
 									{/* /.Legend Panel */}
 									<div className="card-body">
 										<div className="row">
@@ -2955,8 +2988,8 @@ export default class DBTFarmerDashboard extends Component {
 												<a href="#" id="popup-closer" className="ol-popup-closer" />
 												<div id="popup-content" />
 											</div>
-											{/* Legend Panel */}
 
+											{/* Legend Panel */}
 											<div id={"legend"} className="box stack-top">
 												<LegendPanelDashboard props={this.state.classValues} />
 											</div>
