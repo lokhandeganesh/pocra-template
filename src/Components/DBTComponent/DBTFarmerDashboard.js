@@ -33,8 +33,9 @@ import $ from 'jquery';
 
 // import { ImageViewer } from "react-image-viewer-dv"
 // ReactJS UI Ant Design Popover Component
+import "antd/dist/antd.css";
 import { Popover, Button } from 'antd';
-import { isEmpty } from 'ol/extent';
+
 
 // Variable Declaration
 
@@ -237,12 +238,26 @@ export default class DBTFarmerDashboard extends Component {
 			var taluka = document.getElementById("taluka").value;
 			var village = document.getElementById("village").value;
 
+			// Selection dropdown of Stages and Locations
+
+			
+			// 	value="">--Please choose Application Stagewise Locations--
+			// 	value="stage-location-all" --- All Locations
+			// 	value="stage-location-pre-san-pend" --- Pre-Sanction Pending
+			// 	value="stage-location-pre-san-rcv" --- Pre-Sanction Received
+			// 	value="stage-location-work-comp" --- Work Completed
+			// 	value="stage-location-payment-disb" --- Payment Disbursed
+			
+
+			var selectMenuStage = $("#select-menu-stage").val();
+			var selectMenuStageLocation = $("#select-menu-stage-location").val();
+
 			// Location buttons
-			var allLocationRadio = document.getElementById("locationRadio").checked;
-			var preSanPendLocRadio = document.getElementById("pendingRadio").checked;
-			var preSanRecLocRadio = document.getElementById("RecvRadio").checked;
-			var workDoneLocRadio = document.getElementById("workRadio").checked;
-			var disbLocRadio = document.getElementById("disbursRadio").checked;
+			// var allLocationRadio = document.getElementById("locationRadio").checked;
+			// var preSanPendLocRadio = document.getElementById("pendingRadio").checked;
+			// var preSanRecLocRadio = document.getElementById("RecvRadio").checked;
+			// var workDoneLocRadio = document.getElementById("workRadio").checked;
+			// var disbLocRadio = document.getElementById("disbursRadio").checked;
 
 			var infoTabled = document.getElementById("infoTable");
 			var jsondataFeatureProp = '';
@@ -253,7 +268,7 @@ export default class DBTFarmerDashboard extends Component {
 				}, 1000);
 			});
 
-			if (activity === "All" && district !== "All" && taluka === "All" && village === "All" && allLocationRadio === false) {
+			if (activity === "All" && district !== "All" && taluka === "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
 					viewResolution,
@@ -292,7 +307,7 @@ export default class DBTFarmerDashboard extends Component {
 						});
 				}
 
-			} else if (activity !== "All" && district !== "All" && taluka === "All" && village === "All" && allLocationRadio === false) {
+			} else if (activity !== "All" && district !== "All" && taluka === "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -327,7 +342,7 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity == "All" && district !== "All" && taluka !== "All" && village === "All" && allLocationRadio === false) {
+			} else if (activity == "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -364,7 +379,7 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village === "All" && allLocationRadio === false) {
+			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 				// imgSource
 				// document.getElementById("tableSection").style.display = "block";
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
@@ -402,9 +417,9 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
+			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
 
-				if (allLocationRadio == true) {
+				if (selectMenuStageLocation === "stage-location-all") {
 					var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 						evt.coordinate,
 						viewResolution,
@@ -464,7 +479,7 @@ export default class DBTFarmerDashboard extends Component {
 
 				var viewResolution = (view.getResolution());
 
-				if (allLocationRadio == true) {
+				if (selectMenuStageLocation === "stage-location-all") {
 					var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
 						evt.coordinate,
 						viewResolution,
@@ -521,7 +536,7 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
+			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -891,8 +906,7 @@ export default class DBTFarmerDashboard extends Component {
 							no_of_application: activities.no_of_presanction,
 							districtName: activities.district,
 						})
-					}
-					else if (applicationFor === "no_of_work_completed") {
+					} else if (applicationFor === "no_of_work_completed") {
 						this.setState({
 							lat: activities.lat,
 							lon: activities.lon,
@@ -1753,7 +1767,6 @@ export default class DBTFarmerDashboard extends Component {
 	// load pocra taluka
 	getTaluka(event) {
 		document.getElementById("infoTable").innerHTML = "";
-		// document.getElementById("villagediv").style.display = "block";
 		document.getElementById("villProfDiv").style.display = "none";
 
 		var districtCode = event.target.value;
@@ -1789,9 +1802,7 @@ export default class DBTFarmerDashboard extends Component {
 	getVillage(event) {
 		document.getElementById("infoTable").innerHTML = "";
 
-		// document.getElementById("villagediv").style.display = "none";
 		document.getElementById("villProfDiv").style.display = "none";
-		// document.getElementById("applicationRadio").ckecked = true;
 
 
 		var talukaCode = event.target.value;
@@ -2036,8 +2047,8 @@ export default class DBTFarmerDashboard extends Component {
 		var vincode = $('#village').val();
 		var activity = $('#activity').val();
 
-		if (vincode ===''){
-			alert ('Select Village')
+		if (vincode === '') {
+			alert('Select Village')
 		}
 
 		var tableBodyData = [];
@@ -2045,7 +2056,7 @@ export default class DBTFarmerDashboard extends Component {
 		// var ele = document.getElementById('legend-div');
 
 		fetch(
-			'http://gis.mahapocra.gov.in/weatherservices/meta/dbtDynamicLegend?attribute=Farmer&villageCode='+vincode+'&activityId='+activity
+			'http://gis.mahapocra.gov.in/weatherservices/meta/dbtDynamicLegend?attribute=Farmer&villageCode=' + vincode + '&activityId=' + activity
 		)
 			.then(response => response.json())
 			// console.log(response);
@@ -2063,19 +2074,18 @@ export default class DBTFarmerDashboard extends Component {
 					dynamic_table_html_text +=
 						'<tr>' +
 						'<th scope="row">' +
-						activities.activity_group_name +
+						activities.activity_group_name+'['+ activities.activity_group_id +']'+
 						'</th> ' +
 						'<td class="w-5"> ' +
 						'<img src="pocra_dashboard/dist/legend/dynamicLegend/' +
 						activities.legend_id +
 						'.png"' +
-						'class="img-fluid img-thumbnail" alt="legend-image" />' +
+						'class="img-fluid img-thumbnail" alt="legend-image"/>' +
 						'</td>' +
 						'</tr> ';
 				});
 				dynamic_table_html_text += '</tbody></table>';
 				// console.log(dynamic_table_html_text);
-
 				$(ele).html(dynamic_table_html_text);
 			});
 	}
@@ -2108,11 +2118,11 @@ export default class DBTFarmerDashboard extends Component {
 		// var paymentDoneRadio = document.getElementById("paymentDoneRadio").checked;
 
 		// Point Location Radio Functions
-		var locationRadio = document.getElementById("locationRadio").checked;
-		var pendingRadio = document.getElementById("pendingRadio").checked;
-		var RecvRadio = document.getElementById("RecvRadio").checked;
-		var workRadio = document.getElementById("workRadio").checked;
-		var disbursRadio = document.getElementById("disbursRadio").checked;
+		// var locationRadio = document.getElementById("locationRadio").checked;
+		// var pendingRadio = document.getElementById("pendingRadio").checked;
+		// var RecvRadio = document.getElementById("RecvRadio").checked;
+		// var workRadio = document.getElementById("workRadio").checked;
+		// var disbursRadio = document.getElementById("disbursRadio").checked;
 
 		// // WMS Layers display on Drop down event
 		if (selectMenuStage == '') {
@@ -2209,39 +2219,12 @@ export default class DBTFarmerDashboard extends Component {
 			labelValue = "Disbursement";
 
 		}
+
 		// Point location Layer display
 		if (selectMenuStageLocation === 'stage-location-all') {
-			console.log("Location")
-		}
-		else if (selectMenuStageLocation === 'stage-location-pre-san-pend') {
+			// selectMenuStage = ''
 
-		}
-		else if (selectMenuStageLocation === 'stage-location-pre-san-rcv') {
-
-		}
-		else if (selectMenuStageLocation === 'stage-location-work-comp') {
-
-		}
-		else if (selectMenuStageLocation === 'stage-location-payment-disb') {
-		}
-
-
-
-
-		if (locationRadio === true && pendingRadio === false && RecvRadio === false && workRadio === false && disbursRadio === false) {
-			// document.getElementById("villageRadio").checked = false;
-			// document.getElementById("regestrationRadio").checked = false;
-			// document.getElementById("applicationRadio").checked = false;
-			// document.getElementById("presanctionRadio").checked = false;
-			// document.getElementById("workCompletedRadio").checked = false;
-			// document.getElementById("paymentDoneRadio").checked = false;
-
-			document.getElementById("locationRadio").checked = true;
-
-			document.getElementById("pendingRadio").checked = false;
-			document.getElementById("RecvRadio").checked = false;
-			document.getElementById("workRadio").checked = false;
-			document.getElementById("disbursRadio").checked = false;
+			console.log("location-all")
 
 			labelValue = "Locations";
 
@@ -2317,107 +2300,50 @@ export default class DBTFarmerDashboard extends Component {
 				source: imgSource
 			});
 			map.addLayer(pocraDBTLayer_point);
-
 		}
-		else if (locationRadio === false && pendingRadio === true && RecvRadio === false && workRadio === false && disbursRadio === false) {
-			// document.getElementById("villageRadio").checked = false;
-			// document.getElementById("regestrationRadio").checked = false;
-			// document.getElementById("applicationRadio").checked = false;
-			// document.getElementById("presanctionRadio").checked = false;
-			// document.getElementById("workCompletedRadio").checked = false;
-			// document.getElementById("paymentDoneRadio").checked = false;
-
-			document.getElementById("locationRadio").checked = false;
-			document.getElementById("pendingRadio").checked = true;
-
-			document.getElementById("RecvRadio").checked = false;
-			document.getElementById("workRadio").checked = false;
-			document.getElementById("disbursRadio").checked = false;
-
+		else if (selectMenuStageLocation === 'stage-location-pre-san-pend') {
 			labelValue = "Locations";
 			statusCode = 1;
 
 			this.getApplicationStatusLayer(statusCode, village.value, activity.value, labelValue);
 
 		}
-		else if (locationRadio === false && pendingRadio === false && RecvRadio === true && workRadio === false && disbursRadio === false) {
-			// document.getElementById("villageRadio").checked = false;
-			// document.getElementById("regestrationRadio").checked = false;
-			// document.getElementById("applicationRadio").checked = false;
-			// document.getElementById("presanctionRadio").checked = false;
-			// document.getElementById("workCompletedRadio").checked = false;
-			// document.getElementById("paymentDoneRadio").checked = false;
-
-			document.getElementById("locationRadio").checked = false;
-			document.getElementById("pendingRadio").checked = false;
-			document.getElementById("RecvRadio").checked = true;
-
-			document.getElementById("workRadio").checked = false;
-			document.getElementById("disbursRadio").checked = false;
-
+		else if (selectMenuStageLocation === 'stage-location-pre-san-rcv') {
 			labelValue = "Locations";
 			statusCode = 2;
 
 			this.getApplicationStatusLayer(statusCode, village.value, activity.value, labelValue);
 
 		}
-		else if (locationRadio === false && pendingRadio === false && RecvRadio === false && workRadio === true && disbursRadio === false) {
-			// document.getElementById("villageRadio").checked = false;
-			// document.getElementById("regestrationRadio").checked = false;
-			// document.getElementById("applicationRadio").checked = false;
-			// document.getElementById("presanctionRadio").checked = false;
-			// document.getElementById("workCompletedRadio").checked = false;
-			// document.getElementById("paymentDoneRadio").checked = false;
-
-			document.getElementById("locationRadio").checked = false;
-			document.getElementById("pendingRadio").checked = false;
-			document.getElementById("RecvRadio").checked = false;
-
-			document.getElementById("workRadio").checked = true;
-			document.getElementById("disbursRadio").checked = false;
-
+		else if (selectMenuStageLocation === 'stage-location-work-comp') {
 			labelValue = "Locations";
 			statusCode = 3;
 
 			this.getApplicationStatusLayer(statusCode, village.value, activity.value, labelValue);
 
-
-
 		}
-		else if (locationRadio === false && pendingRadio === false && RecvRadio === false && workRadio === false && disbursRadio === true) {
-			// document.getElementById("villageRadio").checked = false;
-			// document.getElementById("regestrationRadio").checked = false;
-			// document.getElementById("applicationRadio").checked = false;
-			// document.getElementById("presanctionRadio").checked = false;
-			// document.getElementById("workCompletedRadio").checked = false;
-			// document.getElementById("paymentDoneRadio").checked = false;
-
-			document.getElementById("locationRadio").checked = false;
-			document.getElementById("pendingRadio").checked = false;
-			document.getElementById("RecvRadio").checked = false;
-			document.getElementById("workRadio").checked = false;
-			document.getElementById("disbursRadio").checked = true;
-
+		else if (selectMenuStageLocation === 'stage-location-payment-disb') {
 			labelValue = "Locations";
 			statusCode = 4;
 
 			this.getApplicationStatusLayer(statusCode, village.value, activity.value, labelValue)
-
 		}
-
-
 
 
 		// to display graph header label
 		if (activity.value === "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 
 			// document.getElementById("villagediv").style.display = "block";
 			// document.getElementById("regestrationDiv").style.display = "block";
+
+			// $("select.menu-stage-location").selectmenu("enable");
+			// $("#select-menu-stage-location").selectmenu("disabled");
+
 
 
 
@@ -2433,11 +2359,11 @@ export default class DBTFarmerDashboard extends Component {
 		else if (activity.value !== "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
 
 			// disable location and regestation radio button when activity selected and District,Taluka,Village is in 'All' condition
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 			// document.getElementById("regestrationDiv").style.display = "none";
 
 			// document.getElementById("villagediv").style.display = "block";
@@ -2453,11 +2379,11 @@ export default class DBTFarmerDashboard extends Component {
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		}
 		else if (activity.value === "All" && district.value !== "All" && taluka.value === 'All' && village.value == 'All') {
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 
 			// document.getElementById("regestrationDiv").style.display = "block";
 
@@ -2471,11 +2397,11 @@ export default class DBTFarmerDashboard extends Component {
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		}
 		else if (activity.value !== "All" && district.value !== "All" && taluka.value === 'All' && village.value === 'All') {
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 
 			// document.getElementById("regestrationDiv").style.display = "block";
 
@@ -2493,15 +2419,16 @@ export default class DBTFarmerDashboard extends Component {
 			// disable button for downloading village profile			
 			document.getElementById("villProfDiv").style.display = "none";
 
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 
 			// document.getElementById("regestrationDiv").style.display = "block";
 
 			$("#select-menu-stage option[value='stage-pocra-villages']").attr("disabled", "disabled");
+
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2517,11 +2444,11 @@ export default class DBTFarmerDashboard extends Component {
 			// disable button for downloading village profile			
 			document.getElementById("villProfDiv").style.display = "none";
 
-			document.getElementById("loc-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			document.getElementById("work-comp-Radio-Div").style.display = "none";
-			document.getElementById("disburst-Radio-Div").style.display = "none";
+			// document.getElementById("loc-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
+			// document.getElementById("work-comp-Radio-Div").style.display = "none";
+			// document.getElementById("disburst-Radio-Div").style.display = "none";
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2541,11 +2468,11 @@ export default class DBTFarmerDashboard extends Component {
 			document.getElementById("villProfDiv").style.display = "block";
 
 			// enable location div's on village level
-			document.getElementById("loc-Radio-Div").style.display = "block";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
-			document.getElementById("work-comp-Radio-Div").style.display = "block";
-			document.getElementById("disburst-Radio-Div").style.display = "block";
+			// document.getElementById("loc-Radio-Div").style.display = "block";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
+			// document.getElementById("work-comp-Radio-Div").style.display = "block";
+			// document.getElementById("disburst-Radio-Div").style.display = "block";
 
 
 			this.setState({
@@ -2571,11 +2498,11 @@ export default class DBTFarmerDashboard extends Component {
 			document.getElementById("villProfDiv").style.display = "block";
 
 			// enable location div's on village level
-			document.getElementById("loc-Radio-Div").style.display = "block";
-			document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
-			document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
-			document.getElementById("work-comp-Radio-Div").style.display = "block";
-			document.getElementById("disburst-Radio-Div").style.display = "block";
+			// document.getElementById("loc-Radio-Div").style.display = "block";
+			// document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
+			// document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
+			// document.getElementById("work-comp-Radio-Div").style.display = "block";
+			// document.getElementById("disburst-Radio-Div").style.display = "block";
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2684,7 +2611,7 @@ export default class DBTFarmerDashboard extends Component {
 												<div className="form-group form-inline">
 													{/* Attribute layer selection */}
 													<div className="col-md-3">
-														<select className="form-control  select2" id='select-menu-stage' style={{ width: "100%", fontSize: "14px", wordWrap: "normal" }} onChange={this.updateHeaderLabel} >
+														<select className="form-control  select2 menu-stage" id='select-menu-stage' style={{ width: "100%", fontSize: "14px", wordWrap: "normal" }} onChange={this.updateHeaderLabel} >
 															{/* <optgroup label="--Please choose Application Stage--">																
 															</optgroup> */}
 															<option value="">--Please choose Application Stage--</option>
@@ -2699,7 +2626,7 @@ export default class DBTFarmerDashboard extends Component {
 
 													{/* Point layer selection */}
 													<div className="col-md-3">
-														<select className="form-control  select2" id='select-menu-stage-location' style={{ width: "100%", fontSize: "14px", marginLeft: "0.2%" }} onChange={this.updateHeaderLabel}>
+														<select className="form-control  select2 menu-stage-location" id='select-menu-stage-location' style={{ width: "100%", fontSize: "14px", marginLeft: "0.2%" }} onChange={this.updateHeaderLabel}>
 															<option value="">--Please choose Application Stagewise Locations--</option>
 															<option value="stage-location-all">All Locations</option>
 															<option value="stage-location-pre-san-pend">Pre-Sanction Pending</option>
@@ -2762,7 +2689,7 @@ export default class DBTFarmerDashboard extends Component {
 									</section> */}
 
 									{/* Points button controls */}
-									<section className="content">
+									{/* <section className="content">
 										<div className="card card-default" style={{ margin: "0.1%" }}>
 											<div className="card-header bg-success text-white">
 												<h3 className="card-title "><b>Point Locations</b></h3>
@@ -2802,7 +2729,7 @@ export default class DBTFarmerDashboard extends Component {
 												</div>
 											</div>
 										</div>
-									</section>
+									</section> */}
 
 									{/* /.Legend Panel */}
 									<div className="card-body">

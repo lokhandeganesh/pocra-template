@@ -610,3 +610,370 @@
 
 
 // }
+
+
+// Location radio functions 
+if (activity === "All" && district !== "All" && taluka === "All" && village === "All" && allLocationRadio === false) {
+	var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// console.log(response.text());
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					// console.log(jsondata.features[0].properties)
+
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All' + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+
+						});
+				}
+				catch (err) {
+					infoTabled.style.display = "none";
+					infoTabled.innerHTML = '';
+				}
+			});
+	}
+
+} else if (activity !== "All" && district !== "All" && taluka === "All" && village === "All" && allLocationRadio === false) {
+
+	var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// console.log(response.text());
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + district + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=All' + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+						});
+				}
+				catch (err) {
+					infoTabled.innerHTML = '';
+
+				}
+			});
+	}
+} else if (activity == "All" && district !== "All" && taluka !== "All" && village === "All" && allLocationRadio === false) {
+
+	var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// console.log(response.text());
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					var vilname = jsondata.features[0].properties.vilname;
+					// console.log(jsondata.features[0].properties)
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+						});
+				}
+				catch (err) {
+					infoTabled.innerHTML = '';
+
+				}
+			});
+	}
+} else if (activity !== "All" && district !== "All" && taluka !== "All" && village === "All" && allLocationRadio === false) {
+	// imgSource
+	// document.getElementById("tableSection").style.display = "block";
+	var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// console.log(response.text());
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					var vilname = jsondata.features[0].properties.vilname;
+					// console.log(jsondata.features[0].properties.dtncode)
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+						});
+				}
+				catch (err) {
+					infoTabled.innerHTML = '';
+
+				}
+			});
+	}
+} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
+
+	if (allLocationRadio == true) {
+		var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+			evt.coordinate,
+			viewResolution,
+			'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+		);
+
+	}
+	else {
+		var url = pocraDBTLayer_point_status.getSource().getFeatureInfoUrl(
+			evt.coordinate,
+			viewResolution,
+			'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+		);
+	}
+
+	// if (!url_point){
+	// 	console.log("on click false")
+	// 	console.log(jsondataFeatureProp)
+	// }
+
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// var rp = response.text()
+				// console.log(rp);
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					var vilname = jsondata.features[0].properties.vilname;
+					// console.log(jsondata.features[0].properties.dtncode)
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							// console.log(data);
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+						});
+				}
+				catch (err) {
+					infoTabled.innerHTML = '';
+
+				}
+			});
+	}
+	map.addOverlay(overlay);
+	overlay.setPosition(undefined)
+	const coordinate = evt.coordinate;
+
+	var viewResolution = (view.getResolution());
+
+	if (allLocationRadio == true) {
+		var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
+			evt.coordinate,
+			viewResolution,
+			'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+		);
+	}
+	else {
+		var url_point = pocraDBTLayer_point_status.getSource().getFeatureInfoUrl(
+			evt.coordinate,
+			viewResolution,
+			'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+		);
+	}
+
+	if (url_point) {
+		fetch(url_point)
+			.then((response) => {
+				// console.log(response.text());
+				var rp = response.text()
+				console.log(rp);
+				return response.text();
+			})
+			.then((html) => {
+				var jsondata = JSON.parse(html);
+				// var jsondataFeatureProp = '';
+
+				// console.log(jsondata.features[0].properties)
+				if (jsondata.features[0]) {
+
+					// assign 'jsondata.features[0].properties' to variable
+					var jsondataFeatureProp = jsondata.features[0].properties;
+
+					// assign point attributes to variables
+					var village_name = jsondataFeatureProp.village_name;
+					var activity_name = jsondataFeatureProp.activity_name;
+					var full_name = jsondataFeatureProp.full_name;
+					var use_712_no = jsondataFeatureProp.use_712_no;
+					var img_url = jsondataFeatureProp.img_url;
+
+					if (jsondataFeatureProp) {
+						var popupContent = overlay.element.querySelector('#popup-content');
+						popupContent.innerHTML = '';
+
+						popupContent.innerHTML =
+							'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village</td><td>' + village_name + '</td></tr><tr><td >Activity</td><td>' + activity_name + '</td></tr><tr><td>Farmer</td><td>' + (full_name) + '</td></tr><tr><td>7/12 No.</td><td class="text">' + (use_712_no) + '</td></tr><tr><td colspan=2><a data-toggle="modal" data-target="#myModal" href="' + (img_url) + '" data-featherlight="' + img_url + '"><img src="' + (img_url) + '" class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';
+
+						$('#model_img').attr('src', img_url);
+
+						overlay.setPosition(coordinate);
+					}
+				}
+				else {
+					overlay.setPosition(undefined)
+				}
+			});
+	}
+} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && allLocationRadio === true || preSanPendLocRadio === true || preSanRecLocRadio === true || workDoneLocRadio === true || disbLocRadio === true) {
+
+	var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+	if (url) {
+		fetch(url)
+			.then((response) => {
+				// console.log(response.text());
+				return response.text();
+			})
+			.then((html) => {
+				try {
+					var jsondata = JSON.parse(html);
+					var dtnname = jsondata.features[0].properties.dtnname;
+					var thnname = jsondata.features[0].properties.thnname;
+					var vilname = jsondata.features[0].properties.vilname;
+					// console.log(jsondata.features[0].properties.dtncode)
+					fetch('http://gis.mahapocra.gov.in/weatherservices/meta/pointInfo_ActivitybyID_dtnCode_thnCode_vinCode_attribute?activityId=' + activity + '&districtCode=' + jsondata.features[0].properties.dtncode + '&talukaCode=' + jsondata.features[0].properties.thncode + '&villageCode=' + jsondata.features[0].properties.vincode + '&attribute=Farmer')
+						.then(response => {
+							return response.json();
+						}).then(data => {
+							var tableData = "";
+							// console.log(data);
+							data.tableInfo.map((activities) => {
+								tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
+							})
+							infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+						});
+				}
+				catch (err) {
+					infoTabled.innerHTML = '';
+
+				}
+			});
+	}
+	map.addOverlay(overlay);
+	overlay.setPosition(undefined)
+	const coordinate = evt.coordinate;
+
+	var viewResolution = (view.getResolution());
+	var url_point = pocraDBTLayer_point.getSource().getFeatureInfoUrl(
+		evt.coordinate,
+		viewResolution,
+		'EPSG:3857', { 'INFO_FORMAT': 'application/json' }
+	);
+
+	if (url_point) {
+		fetch(url_point)
+			.then((response) => {
+				return response.text();
+			})
+			.then((html) => {
+				var jsondata = JSON.parse(html);
+				var jsondataFeatureProp = jsondata.features[0].properties;
+
+				var img_url = jsondataFeatureProp.img_url;
+
+				if (jsondata.features[0]) {
+
+					// assign 'jsondata.features[0].properties' to variable
+					var jsondataFeatureProp = jsondata.features[0].properties;
+
+					// assign point attributes to variables
+					var village_name = jsondataFeatureProp.village_name;
+					var activity_name = jsondataFeatureProp.activity_name;
+					var full_name = jsondataFeatureProp.full_name;
+					var use_712_no = jsondataFeatureProp.use_712_no;
+					var img_url = jsondataFeatureProp.img_url;
+
+					if (jsondataFeatureProp) {
+						var popupContent = overlay.element.querySelector('#popup-content');
+						popupContent.innerHTML = '';
+
+						popupContent.innerHTML =
+							'<div class="table-bordered table-responsive"><table class="table table-bordered  table-striped" style="border: 1px solid #ddd !important;"><tr ><td style="background-color:skyblue;text-align:center;font-weight:bold;" colspan=2>DBT Attribute Information</td></tr><tr><td>Village</td><td>' + village_name + '</td></tr><tr><td >Activity</td><td>' + activity_name + '</td></tr><tr><td>Farmer</td><td>' + (full_name) + '</td></tr><tr><td>7/12 No.</td><td class="text">' + (use_712_no) + '</td></tr><tr><td colspan=2><a data-toggle="modal" data-target="#myModal" href="' + (img_url) + '" data-featherlight="' + img_url + '"><img src="' + (img_url) + '" class="img-fluid" alt="Activity Image"></a></td></tr> </table></div>';
+
+						$('#model_img').attr('src', img_url);
+						// <div class="lightbox-target lightbox-display">
+
+						// 	<img id="lightbox-image" src="https://media.geeksforgeeks.org/wp-content/uploads/20190410184416/button-1a.png" alt="Lightbox" class="lightbox-display-image">
+
+						// 	<span class="lightbox-close lightbox-display-close"></span>
+						// </div>
+
+						overlay.setPosition(coordinate);
+					}
+				} else {
+					overlay.setPosition(undefined)
+					// alert('Hi')
+				}
+			});
+	}
+}
