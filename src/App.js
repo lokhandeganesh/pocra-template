@@ -24,6 +24,7 @@ function App() {
           <Route exact path="/nrm" component={DBTNRMDashboard} />
           <Route exact path="/fpc_fpo" component={DBTFPCDashboard} />
           <Route exact path="/pocra_dashboard" component={MainContent} />
+          {/* <Route exact path="/pocra_dashboard/dbtfarmer" component={MainContent} /> */}
           <Route component={NoFound} />
         </Switch>
         <Footer />

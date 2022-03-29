@@ -1,17 +1,19 @@
 /* Content of modal div is center aligned */
+
 .modal {
 	text-align: center;
 }
+
 .cards {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
- }
-  
- .card {
-	 flex: 0 1 24%;
- }
- 
+}
+
+.card {
+	flex: 0 1 24%;
+}
+
 .selectlabel {
 	width: 180px;
 	padding: 2%;
@@ -46,77 +48,144 @@
 .circle {
 	margin: 1px 1px 15px;
 	width: 100%;
-    height: 20px;
-    border-radius: 6px;
-    font-size: 11px;
-    color: #f8f9fa;
-    line-height: 20px;
-    text-align: start;
-    background: #007bff9e;
-}
-.card-title {
-    float: left;
-    font-size: 0.9rem !important;
-    font-weight: 400 !important;
-    margin: 0;
-}
-.card-body {
-    flex: 1 1 auto;
-    padding: 0.5rem 0.5rem !important; 
+	height: 20px;
+	border-radius: 6px;
+	font-size: 11px;
+	color: #f8f9fa;
+	line-height: 20px;
+	text-align: start;
+	background: #007bff9e;
 }
 
-.select2-selection__rendered{
+.card-title {
+	float: left;
+	font-size: 0.9rem !important;
+	font-weight: 400 !important;
+	margin: 0;
+}
+
+.card-body {
+	flex: 1 1 auto;
+	padding: 0.5rem 0.5rem !important;
+}
+
+.select2-selection__rendered {
 	font-size: 14px;
 }
-.margin2{
+
+.margin2 {
 	margin-left: 1%;
 }
-/* Mouse cursor style to pointer */
-.custom-control-label,.select2{
-	cursor:pointer;
-} 
-.text{
-	mso-number-format:"\@";/*force text*/
-  }
 
-.glow-button {
+/* Mouse cursor style to pointer */
+.custom-control-label, .select2 {
+	cursor: pointer;
+}
+
+.text {
+	mso-number-format: "\@";
+	/*force text*/
+}
+
+/* #legend-img {
+	transform: rotate("-180deg")
+} */
+
+/* #myList ul {
+	list-style-type: none;
+} */
+
+/* #myList li {
+	background: white;
+}
+#myList li:nth-child(odd) {
+	background: rgb(194, 194, 194);
+} */
+
+
+/* .glow-button {
 	background-color: #004A7F;
 	-webkit-border-radius: 5px;
-	/* border-radius: 10px; */
-	/* border: none; */
+	border-radius: 10px;
+	border: none;
 	color: #FFFFFF;
-	/* cursor: pointer;
+	cursor: pointer;
 	display: inline-block;
 	font-family: Arial;
 	font-size: 20px;
 	padding: 5px 10px;
 	text-align: center;
-	text-decoration: none; */
+	text-decoration: none;
 	-webkit-animation: glowing 1500ms infinite;
 	-moz-animation: glowing 1500ms infinite;
 	-o-animation: glowing 1500ms infinite;
 	animation: glowing 1500ms infinite;
-  }
-  @-webkit-keyframes glowing {
-	0% { background-color: #eef773; -webkit-box-shadow: 0 0 3px #ecfd00; }
-	50% { background-color: #91ff00; -webkit-box-shadow: 0 0 40px #91ff00; }
-	100% { background-color: #FF0000; -webkit-box-shadow: 0 0 3px #FF0000; }
-  }
-  
-  @-moz-keyframes glowing {
-	0% { background-color: #eef773; -moz-box-shadow: 0 0 3px #ecfd00; }
-	50% { background-color: #91ff00; -moz-box-shadow: 0 0 40px #91ff00; }
-	100% { background-color: #FF0000; -moz-box-shadow: 0 0 3px #FF0000; }
-  }
-  
-  @-o-keyframes glowing {
-	0% { background-color: #eef773; box-shadow: 0 0 3px #ecfd00; }
-	50% { background-color: #91ff00; box-shadow: 0 0 40px #91ff00; }
-	100% { background-color: #FF0000; box-shadow: 0 0 3px #FF0000; }
-  }
-  
-  @keyframes glowing {
-	0% { background-color: #eef773; box-shadow: 0 0 3px #ecfd00; }
-	50% { background-color: #91ff00; box-shadow: 0 0 40px #91ff00; }
-	100% { background-color: #FF0000; box-shadow: 0 0 3px #FF0000; }
-  }  
+} */
+
+/* @-webkit-keyframes glowing {
+	0% {
+		background-color: #eef773;
+		-webkit-box-shadow: 0 0 3px #ecfd00;
+	}
+
+	50% {
+		background-color: #91ff00;
+		-webkit-box-shadow: 0 0 40px #91ff00;
+	}
+
+	100% {
+		background-color: #FF0000;
+		-webkit-box-shadow: 0 0 3px #FF0000;
+	}
+} */
+
+/* @-moz-keyframes glowing {
+	0% {
+		background-color: #eef773;
+		-moz-box-shadow: 0 0 3px #ecfd00;
+	}
+
+	50% {
+		background-color: #91ff00;
+		-moz-box-shadow: 0 0 40px #91ff00;
+	}
+
+	100% {
+		background-color: #FF0000;
+		-moz-box-shadow: 0 0 3px #FF0000;
+	}
+} */
+
+/* @-o-keyframes glowing {
+	0% {
+		background-color: #eef773;
+		box-shadow: 0 0 3px #ecfd00;
+	}
+
+	50% {
+		background-color: #91ff00;
+		box-shadow: 0 0 40px #91ff00;
+	}
+
+	100% {
+		background-color: #FF0000;
+		box-shadow: 0 0 3px #FF0000;
+	}
+} */
+
+/* @keyframes glowing {
+	0% {
+		background-color: #eef773;
+		box-shadow: 0 0 3px #ecfd00;
+	}
+
+	50% {
+		background-color: #91ff00;
+		box-shadow: 0 0 40px #91ff00;
+	}
+
+	100% {
+		background-color: #FF0000;
+		box-shadow: 0 0 3px #FF0000;
+	}
+} */
