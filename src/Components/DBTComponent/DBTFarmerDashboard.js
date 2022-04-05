@@ -5,10 +5,11 @@ import "ol-ext/dist/ol-ext.css";
 import { Feature, Map, View } from "ol";
 import Overlay from 'ol/Overlay';
 import XYZ from 'ol/source/XYZ';
-import { ScaleLine, MousePosition, defaults as defaultControls } from 'ol/control';
+import { ScaleLine, MousePosition, defaults as defaultControls, ZoomToExtent } from 'ol/control';
 import { format } from 'ol/coordinate';
-import { transform } from 'ol/proj';
+import { transform, fromLonLat } from 'ol/proj';
 import { Image as ImageLayer, Tile as TileLayer, Vector } from 'ol/layer';
+// import TileLayer from 'ol/layer/Tile';
 
 import OSM from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS'
@@ -16,6 +17,7 @@ import ImageWMS from 'ol/source/ImageWMS'
 import ReactDOM from 'react-dom';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
+
 // import "./DBTDashboard.css"
 import "./DBTFarmerDashboard.css"
 import DBTPieChart from './DBTPieChart';
@@ -24,7 +26,7 @@ import { Fill, Stroke, RegularShape, Circle, Icon, Text, Style } from 'ol/style'
 import LegendPanelDashboard from './LegendPanelDashboard';
 import select from "select2";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'jquery/dist/jquery.min.js';
+// import 'jquery/dist/jquery.min.js';
 
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables"
@@ -155,6 +157,29 @@ export default class DBTFarmerDashboard extends Component {
 		// });
 		// olms.apply(map, styleJson);
 
+		
+
+		// var topo = new Map({
+		// 	target: 'map',
+		// 	layers: [
+		// 		new TileLayer({
+		// 			source: new XYZ({
+		// 				url: 'https://tile.osm.org/{z}/{x}/{y}.png',
+		// 			}),
+		// 		}),
+		// 		new Vector({
+		// 			source: new VectorSource(),
+		// 		}),
+		// 	],
+		// 	controls: defaultControls({
+		// 		attributionOptions: { attribution: false, collapsible: false },
+		// 	}).extend([zoomToExtent]),
+		// 	view: new View({
+		// 		// center: fromLonLat([12.84588, 57.695351]),
+		// 		zoom: 10,
+		// 	}),
+		// });
+
 
 		var topo = new TileLayer({
 			title: 'Topo Map',
@@ -162,10 +187,15 @@ export default class DBTFarmerDashboard extends Component {
 			visible: true,
 			source: new XYZ({
 				attributions: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-				url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
-					'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+
+				// Arcgis Map
+				// url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+				// 	'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+				
+				// OSM map
+				url: 'https://tile.osm.org/{z}/{x}/{y}.png',
 				crossOrigin: 'Anonymous',
-			})
+			}),
 		});
 
 		// pocra district layer
@@ -194,7 +224,8 @@ export default class DBTFarmerDashboard extends Component {
 			// overlays: [this.overlay],
 			target: null,
 			view: view,
-			controls: defaultControls().extend([this.mouse, this.scaleLineControl]),// controls on maps
+			controls: defaultControls().extend([this.mouse, this.scaleLineControl]),
+			// controls: defaultControls().extend([this.mouse, this.scaleLineControl,this.ZoomToExtent]),// controls on maps
 			layers: [topo] // layer list to display on map at initial level
 		});
 
@@ -229,6 +260,12 @@ export default class DBTFarmerDashboard extends Component {
 		// display data in table on map click
 		map.on('click', evt => {
 
+			// Zoom to Extent of Map (Reset)
+			// var zoomToExtent = new OlZoomToExtent({
+			// 	label: 'R',
+			// 	tipLabel: 'Reset Zoom to initial',
+			// });
+
 			const coordinate = evt.coordinate;
 
 			var viewResolution = (view.getResolution());
@@ -238,26 +275,17 @@ export default class DBTFarmerDashboard extends Component {
 			var taluka = document.getElementById("taluka").value;
 			var village = document.getElementById("village").value;
 
+			var selectMenuStage = $("#select-menu-stage").val();
+			var selectMenuStageLocation = $("#select-menu-stage-location").val();
+
 			// Selection dropdown of Stages and Locations
 
-			
 			// 	value="">--Please choose Application Stagewise Locations--
 			// 	value="stage-location-all" --- All Locations
 			// 	value="stage-location-pre-san-pend" --- Pre-Sanction Pending
 			// 	value="stage-location-pre-san-rcv" --- Pre-Sanction Received
 			// 	value="stage-location-work-comp" --- Work Completed
 			// 	value="stage-location-payment-disb" --- Payment Disbursed
-			
-
-			var selectMenuStage = $("#select-menu-stage").val();
-			var selectMenuStageLocation = $("#select-menu-stage-location").val();
-
-			// Location buttons
-			// var allLocationRadio = document.getElementById("locationRadio").checked;
-			// var preSanPendLocRadio = document.getElementById("pendingRadio").checked;
-			// var preSanRecLocRadio = document.getElementById("RecvRadio").checked;
-			// var workDoneLocRadio = document.getElementById("workRadio").checked;
-			// var disbLocRadio = document.getElementById("disbursRadio").checked;
 
 			var infoTabled = document.getElementById("infoTable");
 			var jsondataFeatureProp = '';
@@ -296,7 +324,8 @@ export default class DBTFarmerDashboard extends Component {
 											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
 
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="table-responsive" id="dynamic-table" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+
 
 									});
 							}
@@ -307,7 +336,8 @@ export default class DBTFarmerDashboard extends Component {
 						});
 				}
 
-			} else if (activity !== "All" && district !== "All" && taluka === "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
+			}
+			else if (activity !== "All" && district !== "All" && taluka === "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -333,7 +363,7 @@ export default class DBTFarmerDashboard extends Component {
 										data.tableInfo.map((activities) => {
 											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="table-responsive" id="dynamic-table" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -342,7 +372,8 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity == "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
+			}
+			else if (activity == "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -370,7 +401,7 @@ export default class DBTFarmerDashboard extends Component {
 										data.tableInfo.map((activities) => {
 											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="table-responsive" id="dynamic-table" ><table id="example" class="table table-bordered table-striped"><thead><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -379,7 +410,8 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
+			}
+			else if (activity !== "All" && district !== "All" && taluka !== "All" && village === "All" && selectMenuStageLocation !== "stage-location-all") {
 				// imgSource
 				// document.getElementById("tableSection").style.display = "block";
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
@@ -408,7 +440,7 @@ export default class DBTFarmerDashboard extends Component {
 										data.tableInfo.map((activities) => {
 											tableData = tableData + "<tr><td>" + activities.activity_group + "</td><td>" + activities.no_of_application + "</td><td>" + activities.no_of_presanction + "</td><td>" + activities.no_of_paymentdone + "</td></tr>"
 										})
-										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="card-body" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
+										infoTabled.innerHTML = '<div class="container-fluid" ><div class="row" ><div class="col-12"><div class="card"><div class="card-header"><h3 class="card-title"><b>District: ' + dtnname + '|Taluka: ' + thnname + '|Village: ' + vilname + '</b></h3><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus" ></i></button><button type="button" class="btn btn-tool" data-card-widget="remove" ><i class="fas fa-times" /></button></div></div><div class="table-responsive" id="dynamic-table" ><table id="example" class="table table-bordered table-striped"><thead ><tr><th>Activity </th><th>Applications </th><th>Presanctions </th><th>Disbursement </th></tr></thead><tbody>' + tableData + '</tbody></table></div></div></div></div></div>';
 									});
 							}
 							catch (err) {
@@ -417,7 +449,8 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
+			}
+			else if (activity === "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
 
 				if (selectMenuStageLocation === "stage-location-all") {
 					var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
@@ -536,7 +569,8 @@ export default class DBTFarmerDashboard extends Component {
 							}
 						});
 				}
-			} else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
+			}
+			else if (activity !== "All" && district !== "All" && taluka !== "All" && village !== "All" && selectMenuStageLocation === "stage-location-all" || selectMenuStageLocation === "stage-location-pre-san-pend" || selectMenuStageLocation === "stage-location-pre-san-rcv" || selectMenuStageLocation === "stage-location-work-comp" || selectMenuStageLocation === "stage-location-payment-disb") {
 
 				var url = pocraDBTLayer.getSource().getFeatureInfoUrl(
 					evt.coordinate,
@@ -714,9 +748,7 @@ export default class DBTFarmerDashboard extends Component {
 						no_of_registration: activities.no_of_registration,
 						no_of_paymentdone: activities.no_of_paymentdone
 					});
-
 					vectorSource.addFeature(feature);
-
 				});
 
 				if (featurelayer) {
@@ -1778,7 +1810,8 @@ export default class DBTFarmerDashboard extends Component {
 		if (districtCode === "All") {
 			ele.innerHTML = "<option value='All'>All Taluka</option>";
 			ele1.innerHTML = "<option value='All'>All Village</option>";
-		} else {
+		}
+		else {
 			ele.innerHTML = "<option value='All'>All Taluka</option>";
 			ele1.innerHTML = "<option value='All'>All Village</option>";
 			fetch('http://gis.mahapocra.gov.in/weatherservices/meta/dtaluka?dtncode=' + districtCode)
@@ -1789,19 +1822,15 @@ export default class DBTFarmerDashboard extends Component {
 					initialTaluka = data.taluka.map((taluka) => {
 						ele.innerHTML = ele.innerHTML +
 							'<option value="' + taluka.thncode + '">' + taluka.thename + '</option>';
-
 					});
-
 				});
 		}
 		this.updateHeaderLabel();
-
 	}
 
 	// load pocra village
 	getVillage(event) {
 		document.getElementById("infoTable").innerHTML = "";
-
 		document.getElementById("villProfDiv").style.display = "none";
 
 
@@ -1811,7 +1840,8 @@ export default class DBTFarmerDashboard extends Component {
 
 		if (talukaCode === "All") {
 			ele.innerHTML = "<option value='All'>All Village</option>";
-		} else {
+		}
+		else {
 			ele.innerHTML = "<option value='All'>All Village</option>";
 			fetch('http://gis.mahapocra.gov.in/weatherservices/meta/village?thncode=' + talukaCode)
 				.then(response => {
@@ -2074,7 +2104,7 @@ export default class DBTFarmerDashboard extends Component {
 					dynamic_table_html_text +=
 						'<tr>' +
 						'<th scope="row">' +
-						activities.activity_group_name+'['+ activities.activity_group_id +']'+
+						activities.activity_group_name + '[' + activities.activity_group_id + ']' +
 						'</th> ' +
 						'<td class="w-5"> ' +
 						'<img src="pocra_dashboard/dist/legend/dynamicLegend/' +
@@ -2102,27 +2132,12 @@ export default class DBTFarmerDashboard extends Component {
 		var taluka = document.getElementById("taluka");
 		var village = document.getElementById("village");
 
-		var selectMenuStage = $("#select-menu-stage").val();
-		var selectMenuStageLocation = $("#select-menu-stage-location").val();
+		var selectMenuStage = $("#select-menu-stage").val(); // Attributes
+		var selectMenuStageLocation = $("#select-menu-stage-location").val(); // Location
 
 		var applicationFor = "";
 		var labelValue = "";
 
-		// var villageRadio = document.getElementById("villageRadio").checked;
-
-		// Attribute Radio Functions
-		// var regestrationRadio = document.getElementById("regestrationRadio").checked;
-		// var applicationRadio = document.getElementById("applicationRadio").checked;
-		// var presanctionRadio = document.getElementById("presanctionRadio").checked;
-		// var workCompletedRadio = document.getElementById("workCompletedRadio").checked;
-		// var paymentDoneRadio = document.getElementById("paymentDoneRadio").checked;
-
-		// Point Location Radio Functions
-		// var locationRadio = document.getElementById("locationRadio").checked;
-		// var pendingRadio = document.getElementById("pendingRadio").checked;
-		// var RecvRadio = document.getElementById("RecvRadio").checked;
-		// var workRadio = document.getElementById("workRadio").checked;
-		// var disbursRadio = document.getElementById("disbursRadio").checked;
 
 		// // WMS Layers display on Drop down event
 		if (selectMenuStage == '') {
@@ -2222,9 +2237,11 @@ export default class DBTFarmerDashboard extends Component {
 
 		// Point location Layer display
 		if (selectMenuStageLocation === 'stage-location-all') {
-			// selectMenuStage = ''
 
-			console.log("location-all")
+			$("#select-menu-stage")[0].selectedIndex = 0; // Attributes (menu-stage) reset
+			$("#select-menu-stage").val('');
+
+			// console.log("location-all")
 
 			labelValue = "Locations";
 
@@ -2242,9 +2259,7 @@ export default class DBTFarmerDashboard extends Component {
 			}
 			if (pocraDBTLayer) {
 				map.removeLayer(pocraDBTLayer)
-				map.removeLayer(featurelayer)
-				map.removeLayer(geojson)
-
+				// map.removeLayer(geojson)
 			}
 			this.setState(prev => ({
 				classValues: {
@@ -2330,22 +2345,10 @@ export default class DBTFarmerDashboard extends Component {
 		}
 
 
+
+
 		// to display graph header label
 		if (activity.value === "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-
-			// document.getElementById("villagediv").style.display = "block";
-			// document.getElementById("regestrationDiv").style.display = "block";
-
-			// $("select.menu-stage-location").selectmenu("enable");
-			// $("#select-menu-stage-location").selectmenu("disabled");
-
-
-
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2358,16 +2361,6 @@ export default class DBTFarmerDashboard extends Component {
 		}
 		else if (activity.value !== "All" && district.value === "All" && taluka.value === 'All' && village.value == 'All') {
 
-			// disable location and regestation radio button when activity selected and District,Taluka,Village is in 'All' condition
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-			// document.getElementById("regestrationDiv").style.display = "none";
-
-			// document.getElementById("villagediv").style.display = "block";
-
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
 				graphCountLabel: labelValue,
@@ -2379,13 +2372,6 @@ export default class DBTFarmerDashboard extends Component {
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		}
 		else if (activity.value === "All" && district.value !== "All" && taluka.value === 'All' && village.value == 'All') {
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-
-			// document.getElementById("regestrationDiv").style.display = "block";
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2397,13 +2383,6 @@ export default class DBTFarmerDashboard extends Component {
 			this.getCategoryApplicationCount(activity.value, district.value, "All", "All", applicationFor);
 		}
 		else if (activity.value !== "All" && district.value !== "All" && taluka.value === 'All' && village.value === 'All') {
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-
-			// document.getElementById("regestrationDiv").style.display = "block";
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2418,14 +2397,6 @@ export default class DBTFarmerDashboard extends Component {
 		else if (activity.value === "All" && district.value !== "All" && taluka.value !== 'All' && village.value === 'All') {
 			// disable button for downloading village profile			
 			document.getElementById("villProfDiv").style.display = "none";
-
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-
-			// document.getElementById("regestrationDiv").style.display = "block";
 
 			$("#select-menu-stage option[value='stage-pocra-villages']").attr("disabled", "disabled");
 
@@ -2444,12 +2415,6 @@ export default class DBTFarmerDashboard extends Component {
 			// disable button for downloading village profile			
 			document.getElementById("villProfDiv").style.display = "none";
 
-			// document.getElementById("loc-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "none";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "none";
-			// document.getElementById("work-comp-Radio-Div").style.display = "none";
-			// document.getElementById("disburst-Radio-Div").style.display = "none";
-
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
 				graphCountLabel: labelValue,
@@ -2460,20 +2425,12 @@ export default class DBTFarmerDashboard extends Component {
 			this.getDBTLayerClassValuesVillage(activity.value, district.value, taluka.value, applicationFor);
 			this.getCategoryApplicationCount(activity.value, district.value, taluka.value, "All", applicationFor);
 
-			// var talukaCode = taluka.value;
-			// console.log(talukaCode);
 		}
 		else if (activity.value == "All" && district.value !== "All" && taluka.value !== 'All' && village.value !== 'All') {
 			// enable button for downloading village profile
 			document.getElementById("villProfDiv").style.display = "block";
 
-			// enable location div's on village level
-			// document.getElementById("loc-Radio-Div").style.display = "block";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
-			// document.getElementById("work-comp-Radio-Div").style.display = "block";
-			// document.getElementById("disburst-Radio-Div").style.display = "block";
-
+			// if (selectMenuStage)
 
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
@@ -2482,28 +2439,17 @@ export default class DBTFarmerDashboard extends Component {
 					+ " | Taluka:" + taluka.options[taluka.selectedIndex].text
 					+ " | Village: " + village.options[village.selectedIndex].text
 			})
+
+
 			this.getDBTVectorLayerVillageData(activity.value, district.value, taluka.value, village.value, applicationFor);
 			this.getDBTLayerClassValuesVillageData(activity.value, district.value, taluka.value, village.value, applicationFor);
 			this.getCategoryApplicationCount(activity.value, district.value, taluka.value, village.value, applicationFor);
-
-			// vinCode = village.value;
-			// alert("In All actiity");
-
-			// passing vincode to getVillageProfile function
-			// this.getVillageProfile(village.value)
 
 		}
 		else if (activity.value !== "All" && district.value !== "All" && taluka.value !== 'All' && village.value !== 'All') {
 			// enable button for downloading village profile
 			document.getElementById("villProfDiv").style.display = "block";
 
-			// enable location div's on village level
-			// document.getElementById("loc-Radio-Div").style.display = "block";
-			// document.getElementById("pre-san-pend-Radio-Div").style.display = "block";
-			// document.getElementById("pre-san-recv-Radio-Div").style.display = "block";
-			// document.getElementById("work-comp-Radio-Div").style.display = "block";
-			// document.getElementById("disburst-Radio-Div").style.display = "block";
-
 			this.setState({
 				headerLabel: labelValue + " | Activity : " + activity.options[activity.selectedIndex].text,
 				graphCountLabel: labelValue,
@@ -2516,6 +2462,31 @@ export default class DBTFarmerDashboard extends Component {
 			this.getCategoryApplicationCount(activity.value, district.value, taluka.value, village.value, applicationFor);
 
 		}
+
+
+		// Selection dropdown of Stages and Locations
+
+		// Stages (Attributes)
+		// <option value="">--Please choose Application Stage--</option>
+		// <option value="stage-pocra-villages">PoCRA Villages</option>
+		// <option value="stage-registrations">Registrations</option>
+		// <option value="stage-applications" selected >Applications</option>
+		// <option value="stage-presanction">Pre Sanction</option>
+		// <option value="stage-work-completed">Work Completed</option>
+		// <option value="stage-disbursement">Disbursement</option>
+
+		// Locations
+		// 	value="">--Please choose Application Stagewise Locations--
+		// 	value="stage-location-all" --- All Locations
+		// 	value="stage-location-pre-san-pend" --- Pre-Sanction Pending
+		// 	value="stage-location-pre-san-rcv" --- Pre-Sanction Received
+		// 	value="stage-location-work-comp" --- Work Completed
+		// 	value="stage-location-payment-disb" --- Payment Disbursed
+
+
+
+
+
 
 
 	}
@@ -2608,7 +2579,7 @@ export default class DBTFarmerDashboard extends Component {
 									<div className="card-body">
 										<div className="row" style={{ marginBottom: "-16px" }}>
 											<div className="col-md-12">
-												<div className="form-group form-inline">
+												<div className="form-group form-inline" style={{ marginBottom: "5px" }}>
 													{/* Attribute layer selection */}
 													<div className="col-md-3">
 														<select className="form-control  select2 menu-stage" id='select-menu-stage' style={{ width: "100%", fontSize: "14px", wordWrap: "normal" }} onChange={this.updateHeaderLabel} >
@@ -2640,102 +2611,12 @@ export default class DBTFarmerDashboard extends Component {
 										</div>
 									</div>
 
-									{/* Attributes button controls */}
-									{/* <section className="content" id="attributes-button" style={{display:"none"}}> */}
-									{/* <section className="content" id="attributes-button" >
-										<div className="card card-default" style={{ margin: "0.1%" }}>
-											<div className="card-header bg-info text-white">
-												<h3 className="card-title ">
-													<b>Attributes</b>
-												</h3>
-												<div className="card-tools">
-													<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
-												</div>
-											</div>
-
-											<div className="card-body" >
-												<div className="row" style={{ marginBottom: "-16px", fontWeight: 'bold', marginLeft: "1px" }}>
-													<div className="col-md-12">
-														<div className="form-group form-inline ">
-															<div className="margin2 form-check form-check-inline col-md-2" id="villagediv">
-																<input class="form-check-input" type="radio" id="villageRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="villageRadio">PoCRA Villages</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" id='regestrationDiv'>
-																<input class="form-check-input" type="radio" id="regestrationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="regestrationRadio">Registrations</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" >
-																<input class="form-check-input" type="radio" id="applicationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="applicationRadio">Applications</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2">
-																<input class="form-check-input" type="radio" id="presanctionRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="presanctionRadio">Pre Sanction</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2">
-																<input class="form-check-input" type="radio" id="workCompletedRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="workCompletedRadio">Work Completed</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2">
-																<input class="form-check-input" type="radio" id="paymentDoneRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="paymentDoneRadio">Disbursement</label>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</section> */}
-
-									{/* Points button controls */}
-									{/* <section className="content">
-										<div className="card card-default" style={{ margin: "0.1%" }}>
-											<div className="card-header bg-success text-white">
-												<h3 className="card-title "><b>Point Locations</b></h3>
-												<div className="card-tools">
-													<button type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-minus" /></button>
-												</div>
-											</div>
-
-											<div className="card-body" >
-												<div className="row" style={{ marginBottom: "-16px", fontWeight: 'bold', marginLeft: "1px" }}>
-													<div className="col-md-12">
-														<div className="form-group form-inline ">
-															<div className="margin2 form-check form-check-inline col-md-2" id='loc-Radio-Div' >
-																<input class="form-check-input" type="radio" id="locationRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="locationRadio">All Locations</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" id='pre-san-pend-Radio-Div' >
-																<input class="form-check-input" type="radio" id="pendingRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="pendingRadio">Pre-Sanction Pending</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" id='pre-san-recv-Radio-Div' >
-																<input class="form-check-input" type="radio" id="RecvRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="RecvRadio">Pre-Sanction Received</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" id='work-comp-Radio-Div' >
-																<input class="form-check-input" type="radio" id="workRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="workRadio">Work Completed</label>
-															</div>
-															<div className="margin2 form-check form-check-inline col-md-2" id='disburst-Radio-Div' >
-																<input class="form-check-input" type="radio" id="disbursRadio" name="customRadio" onChange={this.updateHeaderLabel} />
-																<label class="form-check-label" for="disbursRadio">Payment Disbursed</label>
-															</div>
-
-														</div>
-
-													</div>
-												</div>
-											</div>
-										</div>
-									</section> */}
-
 									{/* /.Legend Panel */}
-									<div className="card-body">
+									<div className="card-body" >
 										<div className="row">
-											<div className="col-12" id="map" style={{ height: "70vh", width: "100%" }}>
+											<div className="col-12" id="map" style={{ height: "70vh", width: "100%", borderStyle: "groove" }}>
 											</div>
+
 											<div id="popup" className="ol-popup">
 												<a href="#" id="popup-closer" className="ol-popup-closer" />
 												<div id="popup-content" />
@@ -2752,9 +2633,9 @@ export default class DBTFarmerDashboard extends Component {
 												</div> */}
 											</div>
 
-											<div id={"legend"} className="box stack-top">
+											{/* <div id={"legend"} className="box stack-top">
 												<LegendPanelDashboard props={this.state.classValues} />
-											</div>
+											</div> */}
 
 											<section className="content col-sm-5" style={{ position: "absolute", zIndex: "9", top: "20%", right: "0%" }} id="infoTable">
 											</section>
