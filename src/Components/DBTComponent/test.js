@@ -610,7 +610,7 @@ updateHeaderLabels() {
 
 
 };
-
+//
 
 // Location radio functions 
 if (activity === "All" && district !== "All" && taluka === "All" && village === "All" && allLocationRadio === false) {
