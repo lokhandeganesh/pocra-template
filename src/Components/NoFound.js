@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function NoFound() {
+function NoFound() {
     return (
         <div>
             <div className="content-wrapper">
@@ -51,3 +51,5 @@ export default function NoFound() {
 
     )
 }
+
+export default NoFound;

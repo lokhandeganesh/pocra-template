@@ -1,0 +1,43 @@
+.selectlabel {
+  width: 180px;
+  padding: 2%;
+}
+
+.selectlabel-lg {
+  width: 300px;
+  padding: 2%;
+}
+
+.select2-selection__rendered {
+  font-size: 14px;
+}
+/* Mouse cursor style to pointer */
+.custom-control-label,
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.selection-custom {
+  width: "100%";
+  font-size: "14px";
+}
+
+.ml {
+  margin-left: "0.2%";
+}
+
+.word-wrap {
+  word-wrap: "normal";
+}
+
+.card-title {
+  float: left;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  margin: 0;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 0.5rem 0.5rem !important;
+}
